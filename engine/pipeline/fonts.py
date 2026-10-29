@@ -177,3 +177,37 @@ def css(R):
           "var t=setTimeout(chk,3500);function chk(){clearTimeout(t);if(R.heading&&!ok(R.heading))H.classList.add('ff-h');if(R.body&&!ok(R.body))H.classList.add('ff-b');if(R.button&&!ok(R.button))H.classList.add('ff-bt');window.dispatchEvent(new Event('fontsdone'))}"
           "Promise.all(Object.values(R).map(function(f){return document.fonts.load('700 40px \"'+f+'\"').catch(function(){})})).then(function(){setTimeout(chk,50)})})()</script>")
     return "".join(links) + f"<style>:root{{{';'.join(vars_)}}}html.ff-h{{--font-display:var(--font-display-t);--display-weight:800;--display-case:uppercase;--disp-scale:1;--disp-lh:.95;--disp-ls:-.01em}}html.ff-b{{--font-body:var(--font-body-t)}}html.ff-bt{{--font-button:var(--font-display);--button-weight:var(--display-weight);--button-case:var(--display-case);--btn-scale:1}}</style>" + js
+def from_css(url):
+    """Fallback when the browser visit fails (some sites refuse headless Chrome): read the fonts from the site's HTML and CSS instead.
+    Picks the font-family of the rules styling body, h1 and buttons; the first declared family counts (no 'actually painted' check)."""
+    import requests, urllib.parse as U
+    ua = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130 Safari/537.36"}
+    t = requests.get(url, headers=ua, timeout=20).text
+    css = " ".join(re.findall(r"<style[^>]*>(.*?)</style>", t, re.S | re.I))
+    hrefs = [U.urljoin(url, h) for h in re.findall(r"<link[^>]+rel=[\"']?stylesheet[^>]*href=[\"']([^\"']+)", t, re.I) + re.findall(r"<link[^>]+href=[\"']([^\"']+\.css[^\"']*)[\"'][^>]*rel=[\"']?stylesheet", t, re.I)]
+    gl = " ".join(h for h in hrefs if "fonts.googleapis" in h)
+    for h in [h for h in dict.fromkeys(hrefs) if "fonts.googleapis" not in h][:6]:
+        try: css += " " + requests.get(h, headers=ua, timeout=15).text[:600000]
+        except Exception: pass
+    faces = {m.strip().strip("'\"").lower() for m in re.findall(r"@font-face\s*\{[^}]*?font-family\s*:\s*([^;}]+)", css, re.I)}
+    rules = re.findall(r"([^{}]{1,400})\{([^{}]{0,4000})\}", css)
+    VARS = {}
+    for _, body in rules:
+        for k, v in re.findall(r"(--[\w-]+)\s*:\s*([^;}]+)", body): VARS.setdefault(k, v.strip())
+    def devar(v, n=0):
+        return devar(re.sub(r"var\((--[\w-]+)(?:\s*,\s*([^)]*))?\)", lambda m: VARS.get(m.group(1)) or (m.group(2) or ""), v), n + 1) if "var(" in v and n < 4 else v
+    def find(pat):
+        for sel, body in rules:
+            if re.search(pat, sel, re.I):
+                m = re.search(r"font-family\s*:\s*([^;}]+)", body, re.I)
+                fam_ = devar(m.group(1)).strip() if m else ""
+                if fam_ and "var(" not in fam_ and "inherit" not in fam_:
+                    w = re.search(r"font-weight\s*:\s*(\d+|bold)", body, re.I); tt = re.search(r"text-transform\s*:\s*(\w+)", body, re.I)
+                    st = fam_.replace("!important", "").strip(); fam = st.split(",")[0].strip().strip("'\"")
+                    return {"stack": st, "used": fam, "loaded_webfont": fam.lower() in faces or fam.replace(" ", "+").lower() in gl.lower(), "google_link": fam.replace(" ", "+").lower() in gl.lower(),
+                            "weight": ("700" if w and w.group(1) == "bold" else (w.group(1) if w else None)), "transform": tt.group(1) if tt else "none", "ratio": None, "from": "site CSS (browser visit blocked)"}
+        return None
+    body = find(r"(^|[\s,])body\s*$|(^|[\s,])html\s*$|(^|[\s,])body\s*,") or find(r"(^|[\s,])p\s*$")
+    head = find(r"(^|[\s,])h1(\s|$|,)") or find(r"(^|[\s,])h2(\s|$|,)") or body
+    btn = find(r"\.btn|button|\.button") or body
+    return {"heading": head, "body": body, "button": btn}

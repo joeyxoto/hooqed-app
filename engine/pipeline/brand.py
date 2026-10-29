@@ -210,7 +210,13 @@ if "fonts" not in R and not R.get("error"):   # render.json from before font mat
             bz.close()
         json.dump(R, open(render_p, "w"), indent=1)
     except Exception as e: R["fonts_error"] = str(e)[:160]
+if not R.get("fonts"):
+    try: R["fonts"] = fontsmod.from_css(s["final_url"]); R["fonts_from"] = "css"
+    except Exception as e: R["fonts_error"] = str(e)[:160]
 FONTS = fontsmod.resolve(R.get("fonts"))
+if R.get("fonts_from") == "css":
+    for v in FONTS.values():
+        if v.get("why"): v["why"] += " (read from the site's CSS: the browser visit was refused)"
 json.dump(FONTS, open(f"{d}/fonts.json", "w"), indent=1)
 print("fonts:", "; ".join(f"{r} {v.get('detected') or '-'} -> {v.get('family') or 'template'} ({v['source']})" for r, v in FONTS.items()))
 def rgb_hex(c):
