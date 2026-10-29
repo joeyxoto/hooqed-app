@@ -55,11 +55,15 @@ soup = BeautifulSoup(r.text, "html.parser")
 def text(s):
     for t in s(["script", "style", "noscript", "svg"]): t.decompose()
     return re.sub(r"\n\s*\n+", "\n", s.get_text("\n", strip=True))
-links = []
+links, anchor = [], {}
 for a in soup.find_all("a", href=True):
     h = U.urljoin(base, a["href"]).split("#")[0]
-    if U.urlparse(h).netloc == host and h not in links and not re.search(r"\.(jpg|png|pdf|webp)$|wp-login|/feed|tel:|mailto:", h): links.append(h)
-pri = sorted(links, key=lambda h: (not re.search(r"servic|price|pricing|prices|rates|cost|menu|packages|book|review|testimon|about|area|contact|faq|repair|install", h, re.I), len(h)))
+    if U.urlparse(h).netloc == host and not re.search(r"\.(jpg|png|pdf|webp)$|wp-login|/feed|tel:|mailto:", h):
+        if h not in links: links.append(h)
+        anchor[h] = (anchor.get(h, "") + " " + a.get_text(" ", strip=True))[:200]
+# ask-not-fail: pages that say what people buy or book come first (Work with me, Coaching, Apply, Book a call, Services, Programs), by link address or link text
+OFFER = re.compile(r"work[- ]?with|coach|consult|apply|application|book|call|program|services?\b|offer|mentor|session|strateg|join|start[- ]here|pricing|packages|membership|courses?\b", re.I)
+pri = sorted(links, key=lambda h: (not OFFER.search(h + " " + anchor.get(h, "")), not re.search(r"servic|price|pricing|prices|rates|cost|menu|packages|book|review|testimon|about|area|contact|faq|repair|install", h, re.I), len(h)))
 # brand hints from home page
 icons = [U.urljoin(base, l["href"]) for l in soup.find_all("link", href=True) if any(x in " ".join(l.get("rel", [])).lower() for x in ("icon", "apple-touch"))]
 logos = []
@@ -70,7 +74,10 @@ logos = [l for l in logos if not re.search(r"cookie|consent|cky|powered|badge|ac
 import logos as _lg
 logo_cands = _lg.extract(r.text, base)
 og = soup.find("meta", property="og:image")
-colors = re.findall(r"#[0-9a-fA-F]{6}\b", r.text)
+STATE = re.compile(r":(hover|focus|focus-visible|focus-within|active|visited)\b", re.I)
+def resting_css(t):   # drop CSS rules that only style a :hover/:focus/:active/:visited state: those colours are never the resting look
+    return re.sub(r"([^{}]+)\{([^{}]*)\}", lambda m: "" if all(STATE.search(sel) for sel in m.group(1).split(",")) else m.group(0), t)
+colors = re.findall(r"#[0-9a-fA-F]{6}\b", resting_css(r.text))
 theme = soup.find("meta", attrs={"name": "theme-color"})
 pages = [{"url": base, "text": text(BeautifulSoup(r.text, "html.parser"))[:20000]}]
 for h in pri[:14]:

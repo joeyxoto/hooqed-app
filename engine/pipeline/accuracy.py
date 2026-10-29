@@ -76,12 +76,17 @@ def apply(ck, hh, variant):
         if not ok or not ck.scan(variant, "review", q): hh["review"] = None
     for j in hh["jobs"]:
         jf = f"job {j['id']}"
-        for k in ("label", "desc"): j[k] = drop_bad(ck, variant, f"{jf}.{k}", j[k], j[k] if k == "label" else "") or j[k]
+        for k in ("label", "desc"):
+            if hh.get("flow") == "person": ck.scan(variant, f"{jf}.{k}", ck.money.sub("", j[k] or ""))   # the visitor's situation (e.g. a revenue band), not a claim
+            else: j[k] = drop_bad(ck, variant, f"{jf}.{k}", j[k], j[k] if k == "label" else "") or j[k]
         r = j["result"]; r["summary"] = drop_bad(ck, variant, f"{jf}.summary", r["summary"], SAFE["result.summary"].format(sn=sn)); r["title"] = drop_bad(ck, variant, f"{jf}.title", r["title"], "Your " + j["noun"]) 
         r["includes"] = [x for x in r.get("includes") or [] if ck.scan(variant, f"{jf}.includes", x)]
         for q in j["questions"]:
             q["title"] = drop_bad(ck, variant, f"{jf}.question", q["title"], q["title"])
-            for o in q["options"]: ck.scan(variant, f"{jf}.option", o["label"]); ck.scan(variant, f"{jf}.option", o.get("desc", ""))
+            for o in q["options"]:
+                if hh.get("flow") == "person":   # person flow: a band like 'under $10k a month' describes the VISITOR, not a price or claim of the business
+                    ck.scan(variant, f"{jf}.option", ck.money.sub("", o["label"])); ck.scan(variant, f"{jf}.option", ck.money.sub("", o.get("desc", "")))
+                else: ck.scan(variant, f"{jf}.option", o["label"]); ck.scan(variant, f"{jf}.option", o.get("desc", ""))
         if j.get("timeline", {}).get("text"): j["timeline"]["text"] = drop_bad(ck, variant, f"{jf}.timeline", j["timeline"]["text"], None)
         p = j["price"]
         if p.get("mode") == "table":   # every published row must trace: its figure and its row label are on the site

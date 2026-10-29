@@ -153,9 +153,51 @@ def status(req: Request, hid: int):
     br = rj(d / "brand.json")
     if br.get("primary"):
         extra["colours"] = [c["hex"] for c in (br.get("colour_candidates") or [])[:4]] or [br["primary"]]
+    if h["status"] == "needs_input":
+        q = rj(d / "needs-input.json")
+        if q:
+            extra["ask"] = {k: q.get(k) for k in ("case", "title", "help", "fields", "suggestion")}
     el = (h["finished"] or time.time()) - (h["started"] or time.time()) if h["started"] else 0
     return {"status": h["status"], "step": h["step"], "steps": h["steps"], "label": h["step_label"], "error": h["error"], "kind": h["kind"],
             "elapsed": round(el), "name": h["name"], "labels": _labels(h["kind"]), **extra}
+
+
+@app.post("/hooq/{hid}/answer")
+async def answer(req: Request, hid: int):
+    """The owner's answer to a 'needs your input' question: saved, then the build carries on from its cached steps."""
+    o, h = own_hooq(req, hid)
+    d = hdir(hid); f = await req.form()
+    q = rj(d / "needs-input.json")
+    if h["status"] != "needs_input" or not q:
+        return RedirectResponse(f"/hooq/{hid}/build", 303)
+    ans = re.sub(r"\s+", " ", (f.get("answer") or "")).strip()[:300]
+    link = (f.get("link") or "").strip()[:500]
+    if link and not re.match(r"https?://", link):
+        link = "https://" + link
+    if link and not re.match(r"https?://[^\s/]+\.[^\s/]+", link):
+        link = ""
+    if not ans and not link:
+        return JSONResponse({"ok": False, "error": "Type a line first."}, 400)
+    oa = rj(d / "owner-answer.json") or {"answers": []}
+    oa["answers"].append({"case": q.get("case"), "question": q.get("title"), "answer": ans, "link": link or None, "at": time.time()})
+    (d / "owner-answer.json").write_text(json.dumps(oa, indent=1))
+    (d / "needs-input.json").unlink(missing_ok=True)
+    # their own booking page (Calendly, iClosed, Cal.com) doubles as the booking link if none is set yet
+    if link and not h["booking_url"]:
+        kind, script = next(((k, s) for rx, k, s in EMBED_KINDS if re.search(rx, link)), (None, ""))
+        if kind:
+            (d / "booking-embed.json").write_text(json.dumps({"kind": kind, "url": link, "script": script or "/static/noop.js", "title": "Booking calendar", "note": ""}, indent=1))
+            db.run("UPDATE hooqs SET booking_url=? WHERE id=?", link, hid)
+    jobs.enqueue(hid, "build")
+    return JSONResponse({"ok": True})
+
+
+@app.post("/hooq/{hid}/retry")
+def retry(req: Request, hid: int):
+    o, h = own_hooq(req, hid)
+    if h["status"] == "failed":
+        jobs.enqueue(hid, h["kind"] or "build")
+    return RedirectResponse(f"/hooq/{hid}/build", 303)
 
 
 def _labels(kind):
@@ -192,7 +234,14 @@ def check_ctx(hid):
         sw.insert(0, {"hex": br["primary"], "source": "current"})
     photos = [{"id": p["id"], "label": "Intro photo" if p["id"] == "p-intro" else "Photo for " + next((j["label"] for j in all_jobs if "p-" + j["id"] == p["id"]), p["id"]),
                "own": (d / "images" / f"{p['id']}.owner").exists()} for p in hq.get("photos", [])]
+    oc_ = hq.get("outcome") or {}
+    outcome = oc.get("outcome") or oc_.get("guess") or "quote"
+    outcomes = [("quote", "Book a quote/visit"), ("call", "Book a call"), ("appointment", "Book an appointment"), ("checkout", "Send to checkout (coming soon)")]
+    btn_sw = [{"hex": c["hex"], "source": "your site's buttons"} for c in (br.get("cta_candidates") or [])[:3]]
+    if br.get("brand") and br["brand"] not in [c["hex"] for c in btn_sw]:
+        btn_sw.append({"hex": br["brand"], "source": "brand colour", "brand": True})
     return dict(hq=hq, br=br, oc=oc, ov=ov, bk=bk, sym=sym, jobs=jobs_, cands=cands, swatches=sw, photos=photos,
+                outcome=outcome, outcome_guess=oc_.get("guess"), outcomes=outcomes, flow=hq.get("flow") or "quote", btn_swatches=btn_sw,
                 chips=hq.get("chips") or [], chips_removed=oc.get("chips_remove") or [], hide_all=bool(ov.get("hide_all")))
 
 
@@ -230,6 +279,16 @@ async def check_save(req: Request, hid: int):
     col = (f.get("colour_custom") or "").strip() or f.get("colour") or ""
     if re.match(r"#[0-9a-fA-F]{6}$", col):
         oc["colour"] = col.lower()
+    # button colour (the site's own button colour by default)
+    bc = (f.get("button_custom") or "").strip() or f.get("button_colour") or ""
+    if bc == "brand" or re.match(r"#[0-9a-fA-F]{6}$", bc):
+        oc["button_colour"] = bc.lower()
+    # outcome: what visitors do at the end. Checkout isn't built yet: the hooq stays on book-a-call and the interest is logged
+    out_ = f.get("outcome") or ""
+    if out_ in ("quote", "call", "appointment", "checkout"):
+        if out_ == "checkout" and oc.get("outcome") != "checkout":
+            db.run("INSERT INTO checkout_interest(hooq_id, owner_id, url, created) VALUES(?,?,?,?)", hid, o["id"], h["url"], time.time())
+        oc["outcome"] = out_
     # chips
     keep = set(f.getlist("chip_keep"))
     oc["chips_remove"] = sorted(set(oc.get("chips_remove") or []) | {c for c in hq.get("chips", []) if c not in keep})

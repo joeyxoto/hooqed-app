@@ -3,12 +3,17 @@
 <div class="m8gh"><div><p class="m8ml" id="kind">{{ 'Updating your Hooq' if h.kind=='rerender' else 'New Hooq' }}</p><h4 id="nm">{{ h.name }}</h4><p class="m8src">{{ ic.globe }}Drafting from <b>{{ h.url.split('//')[-1].strip('/') }}</b></p></div>
 <div class="m8ctr"><p class="m8ml" id="elab">Elapsed</p><b id="m8el">0:00</b><span class="m8built" id="built" style="display:none">{{ ic.built }}<span id="builtt">Built</span></span></div></div>
 <div class="m8prog"><i><s id="m8pb" style="width:0%"></s></i><b id="m8pc">0%</b></div>
+<div class="m8pn hq-sec" id="ask" style="display:none"><p class="m8ml">{{ ic['ml:Building your Hooq'] }}Needs your input</p>
+ <form id="askf" method="post" action="/hooq/{{ h.id }}/answer"><h4 id="askt" style="margin:4px 0 6px"></h4><p class="hq-note" id="askh" style="margin:0 0 4px"></p><div id="askfs"></div>
+ <p class="hq-err" id="aske"></p><div class="m8acts"><button class="m8-pub" type="submit">Carry on building</button></div></form>
+ <p class="hq-note">Your build picks up where it stopped. Nothing goes live until you publish.</p></div>
 <div class="m8g3"><div class="m8col">
  <div class="m8pn"><p class="m8ml">{{ ic['ml:Services found'] }}Services found</p><ul class="m8chips" id="svc"></ul></div>
  <div class="m8pn"><p class="m8ml">{{ ic['ml:Brand, from the logo'] }}Brand, from the logo</p><div class="m8logo"><b>{{ h.name }}</b></div><ul class="m8sw" id="sw"></ul></div></div>
  <div class="m8pn"><p class="m8ml">{{ ic['ml:Building your Hooq'] }}Building your Hooq</p><ol class="m8steps" id="steps"></ol></div>
  <div class="m8prev"><div class="m8card" style="min-height:0"><div class="m8ch"><span class="m8-nsw">{{ h.name }}</span><span class="m8tag">Draft · editable</span></div>
-  <p class="m8k">Your Hooq</p><h5 class="m8ti" id="pt">Building…</h5><p id="perr" style="color:#C2462F;font-size:13px;margin-top:10px"></p></div>
+  <p class="m8k">Your Hooq</p><h5 class="m8ti" id="pt">Building…</h5><p id="perr" style="color:#C2462F;font-size:13px;margin-top:10px"></p>
+  <form method="post" action="/hooq/{{ h.id }}/retry" id="retry" style="display:none;margin-top:10px"><button class="m8-pub">Try again</button></form></div>
   <div class="m8acts" id="acts" style="display:none"><a href="/hooq/{{ h.id }}/preview/" target="_blank">Review</a><a href="/hooq/{{ h.id }}/check">Edit</a>
   <form method="post" action="/hooq/{{ h.id }}/publish"><button class="m8-pub">Publish</button></form></div></div>
 </div></div>
@@ -24,9 +29,20 @@ async function tick(){const r=await fetch("/hooq/{{ h.id }}/status");const s=awa
  renderSteps(s,done);
  if(done){document.getElementById("built").style.display="inline-flex";document.getElementById("builtt").textContent=(s.kind==="rerender"?"Updated in ":"Built in ")+e+(e===1?" second":" seconds");
   document.getElementById("pt").textContent="Ready to check";document.getElementById("acts").style.display="flex";document.getElementById("elab").style.visibility="hidden";document.getElementById("m8el").style.visibility="hidden";return}
- if(s.status==="failed"){document.getElementById("pt").textContent="Something went wrong";document.getElementById("perr").textContent=s.error||"";return}
+ if(s.status==="failed"){document.getElementById("pt").textContent="Something went wrong";document.getElementById("perr").textContent=s.error||"";document.getElementById("retry").style.display="block";return}
+ if(s.status==="needs_input"&&s.ask){document.getElementById("pt").textContent="Needs your input";showAsk(s.ask);return}
+ document.getElementById("ask").style.display="none";
  setTimeout(tick,1500)}
+const esc=x=>String(x==null?"":x).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+function showAsk(a){const box=document.getElementById("ask");if(box.dataset.case===a.case&&box.style.display!=="none")return;box.dataset.case=a.case;
+ document.getElementById("askt").textContent=a.title;document.getElementById("askh").textContent=a.help||"";
+ document.getElementById("askfs").innerHTML=(a.fields||[]).map(f=>`<label class="hq-lab" for="af_${f.name}">${esc(f.label)}</label><input class="hq-in" id="af_${f.name}" name="${f.name}" type="${f.type==="url"?"url":"text"}" ${f.required?"required":""} maxlength="${f.type==="url"?500:300}" placeholder="${esc(f.placeholder||"")}" value="${f.name==="answer"&&a.suggestion?esc(a.suggestion):""}">`).join("")+(a.suggestion?`<p class="hq-note">We filled in what your site seems to offer. Change it if it's not right.</p>`:"");
+ box.style.display="block";box.scrollIntoView({behavior:"smooth",block:"start"})}
+document.getElementById("askf").addEventListener("submit",async e=>{e.preventDefault();const b=e.target.querySelector("button");b.disabled=true;
+ const r=await fetch(e.target.action,{method:"POST",body:new FormData(e.target)});const j=await r.json().catch(()=>({}));b.disabled=false;
+ if(!r.ok||!j.ok){document.getElementById("aske").textContent=j.error||"That didn't save. Try again.";return}
+ document.getElementById("aske").textContent="";document.getElementById("ask").style.display="none";document.getElementById("pt").textContent="Building…";setTimeout(tick,600)});
 function renderSteps(s,done){const L=document.getElementById("steps");const ls=s.labels||[];
- L.innerHTML=ls.map((lb,i)=>{const k=i+1;const st=done||k<s.step?"m8-done":k===s.step&&s.status==="running"?"m8-act":"m8-pend";return `<li class="m8-st ${st}"><span class="m8-ic"><b class="m8-sp"></b>${CK}</span><div><b>${lb}</b><small>${st==="m8-done"?"Done":st==="m8-act"?"Working on it":"Waiting"}</small></div><time></time></li>`}).join("")}
+ L.innerHTML=ls.map((lb,i)=>{const k=i+1;const wait=k===s.step&&s.status==="needs_input";const st=done||k<s.step?"m8-done":(k===s.step&&s.status==="running")||wait?"m8-act":"m8-pend";return `<li class="m8-st ${st}"><span class="m8-ic"><b class="m8-sp"></b>${CK}</span><div><b>${lb}</b><small>${wait?"Waiting for your answer":st==="m8-done"?"Done":st==="m8-act"?"Working on it":"Waiting"}</small></div><time></time></li>`}).join("")}
 tick();
 </script>{% endblock %}

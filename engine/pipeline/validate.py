@@ -84,10 +84,13 @@ def gate(j, cl):
         if named and len(named) < len(ol): return None, "the clause names only some answers to one question: the answers select between prices"
     return k, ("the only price in the sentence" if len(cl) == 1 else "the only clause naming this job") + ", and it applies to every answer"
 jobs, report_jobs = [], []
+ROUTE = json.load(open(f"{d}/route.json")) if os.path.exists(f"{d}/route.json") else {}
+FLOW = h.get("flow") or ROUTE.get("flow") or "quote"   # person = the visitor's situation, not a job: no service list to match against
+h["flow"] = FLOW
 
 for j in h["jobs"][:5]:
-    sv = svc.get(j["service"].lower())
-    ev = evidence(j["service"], j["label"]) if sv else None
+    sv = svc.get(j["service"].lower()) if FLOW == "quote" else {"planned": True}
+    ev = (evidence(j["service"], j["label"]) if sv else None) if FLOW == "quote" else {"match": "visitor situation (person flow): an answer option, not a claim about the business"}
     if not sv or not ev:
         why = "service not in extracted facts" if not sv else "no evidence on the site"
         fixes.append(f"job {j['id']}: {why} -> dropped"); report_jobs.append({"id": j["id"], "label": j["label"], "service": j["service"], "status": "dropped", "why": why}); continue
@@ -140,7 +143,7 @@ for j in h["jobs"][:5]:
     j["questions"] = qs
     if len(qs) < 1: issues.append(f"job {j['id']}: no own questions")
     jobs.append(j); report_jobs.append({"id": j["id"], "label": j["label"], "service": j["service"], "status": "kept", "evidence": ev})
-if len(jobs) < (1 if s.get("limited") else 2): issues.append("FATAL too few valid jobs")   # limited facts: one evidenced job + "Something else" is enough
+if len(jobs) < (1 if s.get("limited") or FLOW == "person" else 2): issues.append("FATAL too few valid jobs")   # limited facts: one evidenced job + "Something else" is enough
 h["jobs"] = jobs
 # PATH: 1 = site prices (exact), 2 = owner's typed ranges, 3 = job summary + booking (no figure)
 n_site = sum(j["price"]["mode"] in ("site", "table") for j in jobs); n_owner = sum(j["price"]["mode"] == "owner" for j in jobs)
@@ -155,7 +158,7 @@ if s.get("limited"):
     h["owner_prompt_details"] = {"message": "We couldn't read your website. Tell us 3 things: your business name, your main services, and the town or area you cover", "inputs": ["Business name", "Main services", "Town or area you cover"], "optional": True}
 b0 = h.get("booking") or {}
 if not (b0.get("headline") and b0.get("sub")):
-    h["booking"] = {"headline": b0.get("headline") or "Book your call with " + h["shortName"], "sub": b0.get("sub") or h["shortName"] + " talks the job through with you and confirms the price."}
+    h["booking"] = {"headline": b0.get("headline") or "Book your call with " + h["shortName"], "sub": b0.get("sub") or (h["shortName"] + " goes through it with you on the call." if FLOW == "person" else h["shortName"] + " talks the job through with you and confirms the price.")}
     fixes.append("writer left the booking copy empty -> standard booking copy used")
 # v5.2 plain next-step wording: one short standard line under the booking headline (the writer's sentence is kept for reference only)
 h["booking"]["sub_writer"] = h["booking"].get("sub"); h["booking"]["sub"] = "Pick a time that suits you."
@@ -238,6 +241,19 @@ APPT = re.compile(r"groom|salon|spa\b|barber|beaut|nail|lash|brow|wax|massage|de
 # v5.1 consult: coaching/advice businesses (not a local job): a call about the person's situation; no job, postcode or price wording
 CONSULT = re.compile(r"\bcoach|consult|advis|mentor|relationship", re.I)
 h["booking_kind"] = "consult" if CONSULT.search(f.get("trade") or "") else "appointment" if APPT.search(f.get("trade") or "") else "call"
+if FLOW == "person": h["booking_kind"] = "consult"   # person flow is always a call; owner can pick appointment on the outcome row
+# outcome row on the owner check: the engine's guess, or the owner's pick (owner-check.json 'outcome'). checkout is not built yet: it stays a call
+GUESS = {"call": "quote", "consult": "call", "appointment": "appointment"}[h["booking_kind"]]
+oc = OWN_CHECK.get("outcome")
+if oc in ("quote", "call", "appointment", "checkout"):
+    want = {"quote": "call", "call": "consult" if FLOW == "person" else "call", "appointment": "appointment", "checkout": "consult" if FLOW == "person" else "call"}[oc]
+    if want != h["booking_kind"]: fixes.append(f"owner picked outcome '{oc}' -> booking wording '{want}' (was '{h['booking_kind']}')")
+    h["booking_kind"] = want
+h["outcome"] = {"guess": GUESS, "owner": oc, "shown": oc or GUESS}
+# person flow: the tap count in the intro line must match the page's own step list, so the copy never states a number
+if FLOW == "person" and isinstance(h.get("hook"), dict) and h["hook"].get("sub"):
+    sub0 = h["hook"]["sub"]; sub1 = re.sub(r"\b(two|three|four|five|2|3|4|5) quick taps\b", "a few quick taps", sub0, flags=re.I)
+    if sub1 != sub0: sub1 = sub1[0].upper() + sub1[1:]; h["hook"]["sub"] = sub1; fixes.append("tap count in the intro made 'a few quick taps'")
 def kindfix(t):
     if not isinstance(t, str): return t
     if h["booking_kind"] != "appointment":

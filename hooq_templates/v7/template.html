@@ -25,7 +25,7 @@ button,input{font:inherit;color:inherit}img{display:block;max-width:100%}
 .intro .copy{padding:var(--space-block) var(--space-page);display:flex;flex-direction:column;justify-content:center}
 .intro h1{font-size:var(--fs-hero)}.intro .sub{font-size:clamp(17px,1.5vw,20px);max-width:34ch;margin:20px 0 26px}
 .intro .ph{position:relative;min-height:320px}.intro .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 25%}
-.cta{display:inline-flex;align-items:center;justify-content:space-between;gap:18px;background:var(--surface);color:var(--ink);border:0;border-radius:var(--radius-button);padding:18px 24px;font:var(--display-weight) 22px var(--font-display);text-transform:var(--display-case);cursor:pointer;min-width:min(100%,320px)}
+.cta{display:inline-flex;align-items:center;justify-content:space-between;gap:18px;background:var(--cta,var(--surface));color:var(--on-cta,var(--ink));border:0;border-radius:var(--radius-button);padding:18px 24px;font:var(--display-weight) 22px var(--font-display);text-transform:var(--display-case);cursor:pointer;min-width:min(100%,320px)}
 .steps{display:flex;flex-wrap:wrap;gap:6px 18px;margin:18px 0 0;padding:0;list-style:none;font-size:14px}.steps li:before{content:"✓ ";font-weight:700}
 [data-slot=chips]{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.chip{border:1.5px solid currentColor;border-radius:var(--radius-chip);padding:6px 11px;font-size:13px;font-weight:500;line-height:1.25}
 [data-slot=review]{margin-top:24px;border-left:4px solid currentColor;padding:4px 0 4px 16px;max-width:46ch;font-size:15px}[data-slot=review] b{display:block;font-size:13px;margin-top:6px;font-weight:500;opacity:.9}
@@ -85,14 +85,14 @@ button,input{font:inherit;color:inherit}img{display:block;max-width:100%}
  .done{grid-template-columns:1fr;min-height:0}.done h2{font-size:50px}
 }
 </style></head><body>
-<header data-slot="header"><span data-slot="logo">__LOGO__</span><span class="tag" id="tag">Interactive quote</span><span data-slot="progress" id="prog"></span></header>
+<header data-slot="header"><span data-slot="logo">__LOGO__</span><span class="tag" id="tag">__TAG__</span><span data-slot="progress" id="prog"></span></header>
 <main id="app"></main>
-<footer data-slot="footer"><span>__NAME__ · __AREA__</span><span>Interactive quote by Hooqed</span></footer>
+<footer data-slot="footer"><span>__NAME__ · __AREA__</span><span>__TAG__ by Hooqed</span></footer>
 <script>
 /* Content comes only from hooq.json (H). Each block renders into a named data-slot. */
 const H=__DATA__;
 const P=new URLSearchParams(location.search);
-const LC=H.locale||{symbol:"$",lang:"en-US",postal:"Postal code",hour12:false,phone_label:"Phone",msg_tab:"WhatsApp",country:"US"},BK=H.booking_kind==="appointment",CALL=BK?"appointment":"call",CON=H.booking_kind==="consult",JOBW=CON?"situation":"job";
+const LC=H.locale||{symbol:"$",lang:"en-US",postal:"Postal code",hour12:false,phone_label:"Phone",msg_tab:"WhatsApp",country:"US"},BK=H.booking_kind==="appointment",CALL=BK?"appointment":"call",CON=H.booking_kind==="consult"||H.flow==="person",JOBW=CON?"situation":"job";
 const SN=H.shortName,MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],DOW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 const TIMING=CON?{title:"When would you like to talk it through?",help:"No rush. This just helps "+SN+" plan the call.",options:[{id:"weeks",label:"In the next few weeks",desc:"Ready to talk it through",brief:"wants to talk in the next few weeks"},{id:"months",label:"Later on",desc:"Not yet, but soon",brief:"wants to talk later on"},{id:"planning",label:"Just looking",desc:"Getting an idea first",brief:"just looking"}]}:{title:"When are you looking to get this done?",help:"No rush. This just helps "+SN+" plan the call.",options:[{id:"weeks",label:"In the next few weeks",desc:"Ready to get it booked in",brief:"looking at the next few weeks"},{id:"months",label:"In the next few months",desc:"Planning ahead",brief:"looking at the next few months"},{id:"planning",label:"Just planning",desc:"Getting an idea first",brief:"just planning"}]};
 const OTHER={id:"other",label:"Something else",noun:"enquiry",desc:"Talk it through "+(BK?"at an appointment":"on a call"),brief:"something not in the list (to discuss)",questions:[],price:{mode:"none"},result:{title:"Let's talk it through",summary:CON?"Tell "+SN+" what is going on and talk it through on the call.":SN+" will listen to what you need and tell you straight whether it's a job they can take on.",includes:[]}};
@@ -121,7 +121,7 @@ function opt(o,i,key){return `<li><button class="opt ${S.a[key]===o.id?"sel":""}
 function prog(){const n=steps().length,on=S.step>=1&&S.step<=n;document.getElementById("prog").innerHTML=on?`<span class="stp">Step ${S.step} of ${n}</span>`:"";document.getElementById("tag").style.display=on?"none":""}
 const priced=()=>H.jobs.some(j=>j.price.mode==="site"||j.price.mode==="owner"||j.price.mode==="table");
 function intro(){const r=H.review,hk=H.hook;return `<section class="intro" data-slot="intro"><div class="copy"><p class="eyebrow" data-slot="hook.eyebrow">${esc(hk.eyebrow)}</p><h1 class="disp" data-slot="hook.headline">${esc(hk.headline)}</h1><p class="sub" data-slot="hook.sub">${esc(hk.sub)}</p>
-<div><button class="cta" data-go="1" data-slot="hook.cta">${esc(hk.cta)} <span>→</span></button></div><p style="margin:10px 0 0"><button class="talk" data-talk="1">I'd rather just talk →</button></p><ul class="steps" data-slot="steps"><li data-slot="duration">Takes about ${Math.max(20,Math.ceil(steps().length*6/10)*10)} seconds</li><li>${steps().length-1} quick taps</li><li>${H.jobs.every(j=>j.price.mode!=="none")?"Your price range":priced()?"Your guide price or job summary":"Your "+JOBW+" summary"}</li><li>Book ${BK?"an appointment":"a call"}</li></ul>
+<div><button class="cta" data-go="1" data-slot="hook.cta">${esc(hk.cta)} <span>→</span></button></div><p style="margin:10px 0 0"><button class="talk" data-talk="1">I'd rather just talk →</button></p><ul class="steps" data-slot="steps"><li data-slot="duration">Takes about ${Math.max(20,Math.ceil(steps().length*6/10)*10)} seconds</li><li>${steps().length-1} quick taps</li><li>${H.flow==="person"?"Your personal summary":H.jobs.every(j=>j.price.mode!=="none")?"Your price range":priced()?"Your guide price or job summary":"Your "+JOBW+" summary"}</li><li>Book ${BK?"an appointment":"a call"}</li></ul>
 <div data-slot="chips">${(H.chips||[]).map(c=>`<span class="chip">${esc(c)}</span>`).join("")}</div>${r?`<div data-slot="review">“${esc(r.quote)}”<b>${esc(r.by)} · review on ${esc(pos(SN))} website</b></div>`:H.rating?`<div data-slot="review">${/★/.test(H.rating)?"":"★ "}${esc(H.rating)}</div>`:""}</div>
 <div class="ph" data-slot="intro.photo"><img src="images/p-intro.jpg" alt=""></div></section>`}
 function question(){const st=steps()[S.step-1],n=S.step;let q,key,body;
@@ -173,7 +173,7 @@ function result(){const j=job(),b=band(),img=j.id==="other"?"p-intro":"p-"+j.id,
  return `<section class="res" data-slot="result"><div class="rl"><div class="ph" data-slot="result.photo"><img src="images/${esc(img)}.jpg" alt=""></div><div class="in"><p class="eyebrow">${j.id==="other"?"Your enquiry":"Your "+esc(j.noun||j.label.toLowerCase())+(pr?" price":"")}</p><h2 class="disp" data-slot="result.title">${esc(title)}</h2>
 ${pr?priceBlock(j,b):summaryBlock(j)}
 ${drivers(j,pr)}
-${j.result.includes&&j.result.includes.length?`<ul data-slot="includes">${j.result.includes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+${j.result.includes&&j.result.includes.length?`${CON?`<h4 style="margin:16px 0 0">On the ${CALL}</h4>`:""}<ul data-slot="includes">${j.result.includes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
 ${!pr&&trust.length?`<div class="blk" data-slot="trust"><h4>Why people choose ${esc(SN)}</h4><p>${trust.map(esc).join(" · ")}</p></div>`:""}<p style="margin-top:14px"><button class="change" data-change="1">← Change my answers</button></p></div></div>
 <div class="rr">${bookCard()}<div data-slot="about"><h4>${j.id==="other"?"About "+esc(SN):CON?"About this":"About the job"}</h4>${esc(j.result.summary)}${H.rating?`<p style="margin:10px 0 0;font-weight:700">${/★/.test(H.rating)?"":"★ "}${esc(H.rating)}</p>`:""}${H.review?`<p style="margin:10px 0 0">“${esc(H.review.quote)}” <b>${esc(H.review.by)}</b></p>`:""}</div></div></section><div class="sticky"><button data-scroll="1">Book my ${CALL} ↓</button></div>`}
 function slotText(){if(S.tab==="cb")return "wants a call back ("+(S.cb||"any time").toLowerCase()+")";if(S.tab==="wa")return LC.msg_tab==="WhatsApp"?"prefers WhatsApp":"prefers a text";const d=slots()[S.day||0];return CALL+" booked "+fday(d)+" "+ftime(S.time||TIMES[1])}

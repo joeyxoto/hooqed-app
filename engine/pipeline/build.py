@@ -71,12 +71,14 @@ h["rating"] = rating
 loc = f.get("location") or {}
 logo = f'<img src="{br["logo_file"]}" alt="{html.escape(f["name"])}">' if br.get("logo_file") else f'<span class="wm">{html.escape(h["shortName"])}</span>'
 def page(hh, example):
-    data = {k: hh.get(k) for k in ("shortName", "hook", "jobs", "booking", "review", "chips", "rating", "path", "locale", "booking_kind", "booking_embed")}; data["example"] = example
+    data = {k: hh.get(k) for k in ("shortName", "hook", "jobs", "booking", "review", "chips", "rating", "path", "locale", "booking_kind", "booking_embed", "flow")}; data["example"] = example
     t = open("pipeline/template.html").read().replace('<html lang="en-GB">', f'<html lang="{hh["locale"]["lang"]}">')
     for k, v in {"__TITLE__": html.escape(hh["hook"]["headline"] + " · " + f["name"]), "__BRAND__": br["brand"], "__ON_BRAND__": br["on_brand"], "__DEEP__": br["deep"], "__ON_DEEP__": br["on_deep"],
                  "__BUTTON__": br["button"], "__ON_BUTTON__": br["on_button"], "__ACCENT_TEXT__": br["accent_text"], "__HEADER_BG__": br["header_bg"], "__ON_HEADER__": br["on_header"],
-                 "__LOGO__": logo, "__NAME__": html.escape(f["name"]), "__AREA__": html.escape(loc.get("area") or ""), "__DATA__": json.dumps(data).replace("</", "<\\/")}.items():
+                 "__LOGO__": logo, "__NAME__": html.escape(f["name"]), "__AREA__": html.escape(loc.get("area") or ""), "__TAG__": "Personal summary" if hh.get("flow") == "person" else "Interactive quote", "__DATA__": json.dumps(data).replace("</", "<\\/")}.items():
         t = t.replace(k, v)
+    if br.get("cta"):   # the site's own button colour (e.g. green on a navy site) for the main call-to-action; templates without --cta ignore it
+        t = t.replace("</head>", f'<style>:root{{--cta:{br["cta"]};--on-cta:{br["on_cta"]}}}</style></head>', 1)
     return t
 # primary: visitors see the site's own figures exactly, or the owner's own typed ranges; otherwise no figure (path 3: job summary + booking)
 L = json.load(open(f"{d}/locale.json")); ck = accuracy.Checker(d, L)

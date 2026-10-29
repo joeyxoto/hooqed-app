@@ -1,4 +1,4 @@
-"""One background worker thread inside the web service. Jobs live in the hooqs table (status queued/running/ready/failed),
+"""One background worker thread inside the web service. Jobs live in the hooqs table (status queued/running/ready/needs_input/failed),
 so a restart re-queues anything that was running; cached step outputs make the retry cheap."""
 import json, logging, re, shutil, threading, time, traceback
 from pathlib import Path
@@ -34,7 +34,7 @@ def _seed_from_cache(d: Path, url: str):
 def _run(row):
     hid, kind = row["id"], row["kind"] or "build"
     d = hooq_dir(hid); d.mkdir(parents=True, exist_ok=True)
-    db.run("UPDATE hooqs SET status='running', started=?, error=NULL WHERE id=?", db.now(), hid)
+    db.run("UPDATE hooqs SET status='running', started=?, finished=NULL, error=NULL WHERE id=?", db.now(), hid)
 
     def on_step(i, n, key, label):
         db.run("UPDATE hooqs SET step=?, steps=?, step_label=? WHERE id=?", i + 1, n, label, hid)
@@ -61,9 +61,15 @@ def _run(row):
         if row["published"]:
             from . import publish
             publish.publish(hid)
-    except Exception as e:
+    except engine.NeedsInput as e:   # paused for an owner question (not a failure): the build page shows it, the answer resumes it
+        log.info("hooq %s needs the owner's input: %s", hid, e.ask.get("case"))
+        db.run("UPDATE hooqs SET status='needs_input', finished=?, error=NULL, step_label=? WHERE id=?", db.now(), "Needs your input", hid)
+    except engine.BuildError as e:
         log.error("hooq %s failed: %s", hid, traceback.format_exc())
         db.run("UPDATE hooqs SET status='failed', finished=?, error=? WHERE id=?", db.now(), str(e)[:300], hid)
+    except Exception as e:   # unexpected: the owner sees plain words; the detail stays in the server log and run.log
+        log.error("hooq %s failed: %s", hid, traceback.format_exc())
+        db.run("UPDATE hooqs SET status='failed', finished=?, error=? WHERE id=?", db.now(), "We couldn't finish your hooq this time. Try again in a minute.", hid)
 
 
 def _loop():

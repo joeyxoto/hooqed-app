@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS hooqs(id INTEGER PRIMARY KEY, owner_id INTEGER NOT NU
   error TEXT, cost_p REAL DEFAULT 0, booking_url TEXT, published INTEGER DEFAULT 0, created REAL, started REAL, finished REAL, kind TEXT DEFAULT 'build');
 CREATE TABLE IF NOT EXISTS leads(id INTEGER PRIMARY KEY, hooq_id INTEGER NOT NULL, created REAL, name TEXT, phone TEXT, email TEXT,
   postcode TEXT, job TEXT, price TEXT, brief TEXT, answers TEXT, action TEXT, action_detail TEXT, emailed INTEGER DEFAULT 0);
+CREATE TABLE IF NOT EXISTS checkout_interest(id INTEGER PRIMARY KEY, hooq_id INTEGER NOT NULL, owner_id INTEGER NOT NULL, url TEXT, created REAL);
 """
 
 
