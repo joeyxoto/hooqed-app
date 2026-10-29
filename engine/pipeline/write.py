@@ -22,7 +22,7 @@ COPY = """COPY (write like a sharp direct-response copywriter, not a form):
 - Headline: the visitor's desired outcome or pain as a short question they would say yes to. No clever puns, no 'Ready to...?', no 'Unlock', no 'journey'.
 - Questions read like a good consultant asking, not a form ('What's eating most of your week?' not 'Select your obstacle'). Answer labels are in the visitor's own voice, the way they would describe themselves (max 4 words), each with a concrete desc (max 7 words). Options must be clearly different from each other.
 - CTA: 2-4 words, an action toward their outcome (e.g. 'Price my new door', 'Map my next step'). Never a number of taps, never 'Submit', 'Start quiz', 'Start three taps'.
-- Never write generic process lines such as 'a few quick taps', 'see the published price', 'get your summary', 'answer a few questions'. The page already shows the steps.
+- Never write generic process lines such as 'a few quick taps', 'a few quick steps', 'see the published price', 'get your summary', 'answer a few questions'. The page already shows the steps.
 - Banned: 'it's not X, it's Y' and its cousins; 'No X. No Y.'; neat triples of adjectives; clichés (peace of mind, look no further, one-stop, game-changer, seamless, tailored, elevate, unlock, journey, transform your life, take it to the next level, dream body); exclamation marks; emojis.
 - No invented facts: no prices, numbers, timelines, results, guarantees, client counts, credentials or testimonials that are not in FACTS. No urgency or emergency wording. No assumptions specific to one country unless FACTS shows it."""
 PHOTO = """PHOTOS (one strong photo beats many):
@@ -161,7 +161,7 @@ POLISH_SYS = """You are a sharp direct-response copy editor. You get the draft w
 - Every line must read cleanly on its own: subs are full, grammatical sentences (no fragments, no stacked clauses); headlines name the visitor's outcome or problem in plain words they would say.
 - Do not add offers or promises (free, guarantee, same-day, fast, best, no obligation, estimate, discount) unless the exact idea is already in the draft line or FACTS.
 - Change a line only when your version is clearly sharper for this business; otherwise return it unchanged."""
-POLISH = os.environ.get("HOOQ_POLISH", "1") != "0"
+POLISH = os.environ.get("HOOQ_POLISH", "0") != "0"
 if POLISH:
     P0 = _paths(h)
     try:

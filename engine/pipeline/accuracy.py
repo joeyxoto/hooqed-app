@@ -47,7 +47,7 @@ class Checker:
                 if kind == "rating" and k.startswith("★"): continue   # the star icon we print before the site's own rating line (checked as text below)
                 ok &= self.add(variant, field, kind, m.group(0), tr, "found on the site" if tr else "not found on the site")
         return ok
-SAFE = {"hook.sub": "A few quick taps, then book with {sn}.", "hook_q.sub": "A few quick taps, then book with {sn}.", "booking.sub": "{sn} talks it through with you.",
+SAFE = {"hook.sub": "A few quick steps, then book with {sn}.", "hook_q.sub": "A few quick steps, then book with {sn}.", "booking.sub": "{sn} talks it through with you.",
         "result.summary": "{sn} talks the job through with you and gives you a price for your exact job."}
 def drop_bad(ck, variant, field, t, safe=None):
     """keep only sentences that pass; if nothing is left use the safe wording"""

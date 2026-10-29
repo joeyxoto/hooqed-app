@@ -295,8 +295,8 @@ if oc in ("quote", "call", "appointment", "checkout"):
 h["outcome"] = {"guess": GUESS, "owner": oc, "shown": oc or GUESS}
 # person flow: the tap count in the intro line must match the page's own step list, so the copy never states a number
 if FLOW == "person" and isinstance(h.get("hook"), dict) and h["hook"].get("sub"):
-    sub0 = h["hook"]["sub"]; sub1 = re.sub(r"\b(two|three|four|five|2|3|4|5) quick taps\b", "a few quick taps", sub0, flags=re.I)
-    if sub1 != sub0: sub1 = sub1[0].upper() + sub1[1:]; h["hook"]["sub"] = sub1; fixes.append("tap count in the intro made 'a few quick taps'")
+    sub0 = h["hook"]["sub"]; sub1 = re.sub(r"\b(two|three|four|five|2|3|4|5|a few) quick (taps|steps)\b", "a few quick steps", sub0, flags=re.I)
+    if sub1 != sub0: sub1 = sub1[0].upper() + sub1[1:]; h["hook"]["sub"] = sub1; fixes.append("step count in the intro made 'a few quick steps'")
 def kindfix(t):
     if not isinstance(t, str): return t
     if h["booking_kind"] != "appointment":
