@@ -108,7 +108,12 @@ def run_steps(d: Path, steps, url: str = "", template: str = "v7", on_step=None,
             p = subprocess.run(args, cwd=root, env=env, stdout=logf, stderr=subprocess.STDOUT, timeout=900)
             logf.write(f"[{key}] exit {p.returncode} in {time.time() - t0:.1f}s\n"); logf.flush()
             if p.returncode != 0:
-                raise RuntimeError(f"step '{label}' failed (exit {p.returncode})")
+                logf.flush()
+                import re
+                tail = [re.sub(r"xai-[A-Za-z0-9*]+", "xai-***", l.strip()) for l in open(d / "run.log", errors="replace").read().splitlines() if l.strip()][-6:]
+                print(f"[hooqed] step {key} failed in {d.name}:\n" + "\n".join(tail), flush=True)
+                hint = next((l for l in reversed(tail) if "retry" in l or "Error" in l or "error" in l), "")
+                raise RuntimeError(f"step '{label}' failed (exit {p.returncode})" + (f": {hint[:240]}" if hint else ""))
     finally:
         logf.close()
 
