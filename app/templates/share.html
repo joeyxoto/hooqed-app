@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% block title %}Published · {{ h.name }}{% endblock %}
+{% block main %}<div class="m8gh"><div><p class="m8ml">Published</p><h4>{{ h.name }}</h4><p class="m8src">{{ ic.globe }}Your hooq is live.</p></div>
+<span class="m8built" style="display:inline-flex;position:static">{{ ic.built }}Live</span></div>
+<div class="hq-grid2 hq-sec"><div class="m8pn"><p class="m8ml">{{ ic.globe }}Your link</p><code class="hq-code" id="u">{{ url }}</code>
+ <div class="m8acts"><a href="{{ url }}" target="_blank">Open</a><button type="button" onclick="navigator.clipboard.writeText(document.getElementById('u').textContent)">Copy link</button></div></div>
+<div class="m8pn"><p class="m8ml">{{ ic.Integrations }}Embed on your website</p><code class="hq-code" id="e">{{ embed }}</code>
+ <div class="m8acts"><button type="button" onclick="navigator.clipboard.writeText(document.getElementById('e').textContent)">Copy code</button></div>
+ <p class="hq-note">Paste this where you want the hooq to show on your site.</p></div></div>
+<div class="m8acts" style="justify-content:flex-start"><a href="/hooq/{{ h.id }}/check">Edit</a><a href="/dashboard" class="m8-pub">Go to dashboard</a></div>{% endblock %}

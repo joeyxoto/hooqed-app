@@ -1,0 +1,28 @@
+# Render Blueprint: one Docker web service with a 1 GB disk at /data (SQLite, hooq files, published hooqs).
+services:
+  - type: web
+    name: hooqed
+    runtime: docker
+    plan: standard          # 2 GB RAM. Chrome + pipeline peak measured in DEPLOY.md.
+    region: frankfurt
+    healthCheckPath: /healthz
+    numInstances: 1         # a disk means a single instance
+    disk:
+      name: data
+      mountPath: /data
+      sizeGB: 1
+    envVars:
+      - key: DATA_DIR
+        value: /data
+      - key: MAIL_MODE
+        value: send
+      - key: SECRET_KEY
+        generateValue: true
+      - key: XAI_API_KEY
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: MAIL_FROM
+        sync: false
+      - key: BASE_URL
+        sync: false

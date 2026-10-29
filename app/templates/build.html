@@ -1,0 +1,32 @@
+{% extends "base.html" %}{% block title %}Building · {{ h.name }}{% endblock %}
+{% block main %}<div id="m8gen">
+<div class="m8gh"><div><p class="m8ml" id="kind">{{ 'Updating your Hooq' if h.kind=='rerender' else 'New Hooq' }}</p><h4 id="nm">{{ h.name }}</h4><p class="m8src">{{ ic.globe }}Drafting from <b>{{ h.url.split('//')[-1].strip('/') }}</b></p></div>
+<div class="m8ctr"><p class="m8ml" id="elab">Elapsed</p><b id="m8el">0:00</b><span class="m8built" id="built" style="display:none">{{ ic.built }}<span id="builtt">Built</span></span></div></div>
+<div class="m8prog"><i><s id="m8pb" style="width:0%"></s></i><b id="m8pc">0%</b></div>
+<div class="m8g3"><div class="m8col">
+ <div class="m8pn"><p class="m8ml">{{ ic['ml:Services found'] }}Services found</p><ul class="m8chips" id="svc"></ul></div>
+ <div class="m8pn"><p class="m8ml">{{ ic['ml:Brand, from the logo'] }}Brand, from the logo</p><div class="m8logo"><b>{{ h.name }}</b></div><ul class="m8sw" id="sw"></ul></div></div>
+ <div class="m8pn"><p class="m8ml">{{ ic['ml:Building your Hooq'] }}Building your Hooq</p><ol class="m8steps" id="steps"></ol></div>
+ <div class="m8prev"><div class="m8card" style="min-height:0"><div class="m8ch"><span class="m8-nsw">{{ h.name }}</span><span class="m8tag">Draft · editable</span></div>
+  <p class="m8k">Your Hooq</p><h5 class="m8ti" id="pt">Building…</h5><p id="perr" style="color:#C2462F;font-size:13px;margin-top:10px"></p></div>
+  <div class="m8acts" id="acts" style="display:none"><a href="/hooq/{{ h.id }}/preview/" target="_blank">Review</a><a href="/hooq/{{ h.id }}/check">Edit</a>
+  <form method="post" action="/hooq/{{ h.id }}/publish"><button class="m8-pub">Publish</button></form></div></div>
+</div></div>
+<script>
+const CK=`{{ ic.stepcheck }}`;let shown=-1;
+async function tick(){const r=await fetch("/hooq/{{ h.id }}/status");const s=await r.json();
+ const done=s.status==="ready",n=s.steps||1,i=done?n:Math.max(0,s.step-1);
+ const p=done?100:Math.round(i/n*100);document.getElementById("m8pb").style.width=p+"%";document.getElementById("m8pc").textContent=p+"%";
+ const e=s.elapsed||0;document.getElementById("m8el").textContent=Math.floor(e/60)+":"+String(e%60).padStart(2,"0");
+ if(s.name)document.getElementById("nm").textContent=s.name;
+ if(s.services)document.getElementById("svc").innerHTML=s.services.map(x=>`<li>${CK}${x.replace(/</g,"&lt;")}</li>`).join("");
+ if(s.colours)document.getElementById("sw").innerHTML=s.colours.map(c=>`<li style="--c:${c}"><i></i><code>${c}</code></li>`).join("");
+ renderSteps(s,done);
+ if(done){document.getElementById("built").style.display="inline-flex";document.getElementById("builtt").textContent=(s.kind==="rerender"?"Updated in ":"Built in ")+e+(e===1?" second":" seconds");
+  document.getElementById("pt").textContent="Ready to check";document.getElementById("acts").style.display="flex";document.getElementById("elab").style.visibility="hidden";document.getElementById("m8el").style.visibility="hidden";return}
+ if(s.status==="failed"){document.getElementById("pt").textContent="Something went wrong";document.getElementById("perr").textContent=s.error||"";return}
+ setTimeout(tick,1500)}
+function renderSteps(s,done){const L=document.getElementById("steps");const ls=s.labels||[];
+ L.innerHTML=ls.map((lb,i)=>{const k=i+1;const st=done||k<s.step?"m8-done":k===s.step&&s.status==="running"?"m8-act":"m8-pend";return `<li class="m8-st ${st}"><span class="m8-ic"><b class="m8-sp"></b>${CK}</span><div><b>${lb}</b><small>${st==="m8-done"?"Done":st==="m8-act"?"Working on it":"Waiting"}</small></div><time></time></li>`}).join("")}
+tick();
+</script>{% endblock %}

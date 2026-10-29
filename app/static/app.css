@@ -1,0 +1,65 @@
+/* Hooqed v0 owner screens. Visuals come from Dex's m8.css (scene-A-build / scene-D-manage, copied unchanged).
+   This file only lays those components out as a real app and maps them onto form controls; no new colours or type. */
+@font-face{font-family:Outfit;font-weight:600;src:url(fonts/Outfit-600.ttf) format("truetype")}
+@font-face{font-family:Outfit;font-weight:700;src:url(fonts/Outfit-700.ttf) format("truetype")}
+html,body{margin:0;background:#0B0B14}
+body.m8{min-height:100vh;background:linear-gradient(180deg,#17172A,#111120 60%)}
+.m8 a{color:inherit;text-decoration:none}
+.hq-app{min-height:100vh}
+.hq-app.m8adm{grid-template-columns:200px minmax(0,1fr)}
+.m8sb{min-height:100vh}
+.m8sb a{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;color:var(--tx3);font-size:13.5px;font-weight:500}
+.m8sb a svg{width:16px;height:16px;flex:none}
+.m8sb a.m8-on{color:var(--tx);background:linear-gradient(90deg,rgba(161,139,255,.16),rgba(161,139,255,.04));box-shadow:inset 0 0 0 1px rgba(161,139,255,.18)}.m8sb a.m8-on svg{color:var(--vio)}
+.m8sb .hq-foot{margin-top:auto;padding:12px 10px 0;font-size:12px;color:var(--tx4);word-break:break-all}
+.m8mn{max-width:1180px}
+.hq-sec{margin-top:18px}
+.hq-grid2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;align-items:start}
+@media(max-width:900px){.hq-app.m8adm{grid-template-columns:1fr}.m8sb{min-height:0}.hq-grid2{grid-template-columns:1fr}}
+/* inputs use the address-bar look from the scene frame (.m8addr) */
+.hq-in{width:100%;font:500 14px Inter,system-ui,sans-serif;color:var(--tx);background:rgba(255,255,255,.04);border:1px solid var(--hl);border-radius:8px;padding:10px 14px;outline:none}
+.hq-in:focus{box-shadow:0 0 0 3px rgba(161,139,255,.25);border-color:rgba(161,139,255,.45)}
+.hq-in.sm{width:110px;padding:7px 10px}
+.hq-lab{display:block;font-size:12.5px;color:var(--tx3);margin:12px 0 6px}
+.hq-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.hq-err{color:#FFB4B4;font-size:13px;margin:10px 0 0}
+.hq-note{font-size:12.5px;color:var(--tx3);margin:8px 0 0;line-height:1.45}
+.hq-ok{color:#C9F5E2}
+/* buttons = the scene's action pills (.m8acts span / .m8-pub) */
+.m8acts button,.m8acts a,.hq-btn{font:600 13px Inter;color:var(--tx2);background:rgba(255,255,255,.05);box-shadow:inset 0 0 0 1px var(--hl);border:0;border-radius:var(--r2);padding:9px 14px;cursor:pointer;display:inline-block}
+.m8acts .m8-pub,.hq-btn.m8-pub{color:#191923;background:linear-gradient(180deg,#FFC08F,#FFA866);box-shadow:0 8px 20px -8px rgba(255,178,122,.8),inset 0 1px 0 rgba(255,255,255,.4)}
+.m8acts form{display:inline}
+/* auth */
+.hq-auth{min-height:100vh;display:grid;place-items:center;padding:24px}
+.hq-auth .m8pn{width:min(420px,100%);padding:26px}
+.hq-auth .m8sbl{padding:0 0 18px}
+/* choosable tiles reuse chips / swatches / panels */
+.hq-pick input{position:absolute;opacity:0;pointer-events:none}
+.hq-pick{position:relative;cursor:pointer}
+.m8chips label.hq-pick{display:inline-flex;align-items:center;gap:6px;font:500 13px Inter;padding:6px 10px 6px 8px;border-radius:999px;background:rgba(161,139,255,.1);box-shadow:inset 0 0 0 1px rgba(161,139,255,.28);color:#E6E1FF}
+.m8chips label.hq-pick:has(input:not(:checked)){opacity:.4;text-decoration:line-through}
+.m8chips svg{width:13px;height:13px;color:var(--vio);stroke-width:2.6}
+.m8sw label{text-align:center;display:block}
+.m8sw label i{display:block;height:34px;border-radius:var(--r3);background:var(--c);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),0 6px 14px -6px var(--c)}
+.m8sw label span{display:block;font-size:11.5px;color:var(--tx2);margin-top:6px}
+.m8sw label code{display:block;font:500 11px "JetBrains Mono",monospace;color:var(--tx3);margin-top:1px}
+.m8sw label:has(input:checked) i{box-shadow:0 0 0 2px #0B0B14,0 0 0 4px var(--vio)}
+.hq-tiles{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:10px}
+.hq-tiles label .m8logo{min-height:58px;justify-content:center}
+.hq-tiles label .m8logo img{max-height:40px;max-width:130px}
+.hq-tiles label small{display:block;font-size:11.5px;color:var(--tx3);margin-top:5px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hq-tiles label:has(input:checked) .m8logo{box-shadow:0 0 0 2px #0B0B14,0 0 0 4px var(--vio)}
+.m8ans select,.m8ans .hq-in{margin-top:4px}
+.m8ans dd .hq-row{margin-top:6px}
+.hq-photo{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;align-items:center;padding:8px 0;border-top:1px solid var(--hl2)}
+.hq-photo img{width:120px;height:76px;object-fit:cover;border-radius:var(--r3)}
+.hq-photo input[type=file]{font-size:12.5px;color:var(--tx3)}
+.hq-code{display:block;white-space:pre-wrap;word-break:break-all;font:500 12px "JetBrains Mono",monospace;color:var(--tx2);background:rgba(0,0,0,.25);border-radius:var(--r2);padding:12px;box-shadow:inset 0 0 0 1px var(--hl2)}
+.hq-prev{width:100%;height:560px;border:0;border-radius:10px;background:#fff}
+.m8-kc.hq-sel{box-shadow:0 0 0 1px rgba(161,139,255,.6),0 18px 40px -16px rgba(139,124,255,.65)}
+.hq-hooqs{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.hq-empty{color:var(--tx3);font-size:13px}
+/* prices list: the scene's answers table (.m8ans) with room for controls */
+.hq-prices.m8ans>div{grid-template-columns:200px minmax(0,1fr)}
+.m8ans div.hq-row{display:flex;grid-template-columns:none;padding:0;border:0;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center}
+.m8ans dd .hq-note{display:block}

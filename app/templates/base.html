@@ -1,0 +1,12 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Hooqed{% endblock %}</title><link rel="icon" href="/static/brand/icon-32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/m8.css"><link rel="stylesheet" href="/static/app.css"></head>
+<body class="m8">{% block body %}
+<div class="m8adm hq-app"><nav class="m8sb"><div class="m8sbl"><img src="/static/brand/icon.svg" alt="">Hooqed</div><p class="m8ml">Workspace</p>
+<a href="/dashboard" class="{{ 'm8-on' if nav=='dashboard' }}">{{ ic.Dashboard }}Dashboard</a>
+<a href="/new" class="{{ 'm8-on' if nav=='hooqs' }}">{{ ic.Hooqs }}Hooqs</a>
+<a href="/dashboard#leads" class="{{ 'm8-on' if nav=='leads' }}">{{ ic.Leads }}Leads</a>
+<div class="hq-foot">{{ owner.email if owner }}<br><a href="/logout" style="padding:6px 0;color:var(--tx3)">Log out</a></div></nav>
+<main class="m8mn">{% block main %}{% endblock %}</main></div>{% endblock %}
+</body></html>

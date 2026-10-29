@@ -1,0 +1,17 @@
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.pyc
+/data/
+data-local/
+*.db
+*.db-wal
+*.db-shm
+*.key
+*-cred
+*.pem
+outbox/
+.DS_Store

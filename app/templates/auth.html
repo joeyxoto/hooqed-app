@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% block title %}{{ 'Sign up' if mode=='signup' else 'Log in' }} · Hooqed{% endblock %}
+{% block body %}<div class="hq-auth"><form class="m8pn" method="post" action="/{{ mode }}">
+<div class="m8sbl"><img src="/static/brand/icon.svg" alt="">Hooqed</div>
+<p class="m8ml">{{ 'Create your account' if mode=='signup' else 'Welcome back' }}</p>
+<h4>{{ 'Sign up' if mode=='signup' else 'Log in' }}</h4>
+<label class="hq-lab" for="em">Email</label><input class="hq-in" id="em" name="email" type="email" required autocomplete="email">
+<label class="hq-lab" for="pw">Password{% if mode=='signup' %} (8 or more characters){% endif %}</label><input class="hq-in" id="pw" name="password" type="password" required minlength="{{ 8 if mode=='signup' else 1 }}" autocomplete="{{ 'new-password' if mode=='signup' else 'current-password' }}">
+{% if error %}<p class="hq-err">{{ error }}</p>{% endif %}
+<div class="m8acts" style="justify-content:space-between;align-items:center;margin-top:20px">
+{% if mode=='signup' %}<a href="/login" style="background:none;box-shadow:none;padding:0">I have an account</a><button class="m8-pub" type="submit">Create account</button>
+{% else %}<a href="/signup" style="background:none;box-shadow:none;padding:0">Create an account</a><button class="m8-pub" type="submit">Log in</button>{% endif %}</div>
+</form></div>{% endblock %}

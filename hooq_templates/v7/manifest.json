@@ -1,0 +1,9 @@
+{
+  "name": "v7",
+  "label": "Hooq v7 (current)",
+  "entry": "template.html",
+  "tokens": ["--brand","--on-brand","--brand-deep","--on-deep","--button","--on-button","--accent-text","--header-bg","--on-header","--ink","--muted","--paper","--surface","--line","--ribbon","--on-ribbon","--font-display","--font-body","--radius-card","--radius-button","--shadow-card"],
+  "slots": ["header","logo","progress","intro","intro.photo","hook.eyebrow","hook.headline","hook.sub","hook.cta","steps","duration","chips","review","question","contact","result","result.photo","result.title","price","summary","drivers","next-step","timeline","includes","trust","booking","text-me","about","done","owner-brief","footer"],
+  "screens": ["intro","questions","contact","result","done"],
+  "needs": {"window.leadBrief": true, "contact form id": "cf", "contact fields": ["nm","mb","em","pc"], "actions": ["data-confirm","data-textme","data-talk","data-tab"]}
+}

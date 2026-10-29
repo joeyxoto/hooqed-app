@@ -1,0 +1,643 @@
+{
+ "_about": "Typical UK cost ranges. Every figure was extracted by tools/build_price_refs.py from the page at 'url' on 'fetched'; 'quote' is the exact sentence it came from. Draft only: an owner confirms or edits before going live.",
+ "trades": {
+  "plumber": [
+   {
+    "id": "boiler-install",
+    "label": "new boiler installation",
+    "keywords": [
+     "boiler",
+     "new boiler",
+     "boiler replacement",
+     "boiler installation",
+     "combi"
+    ],
+    "low": 1200,
+    "high": 4000,
+    "basis": "a gas combi boiler, supplied and fitted",
+    "quote": "Gas combi boiler installation typically ranges between \u00a31,200 and \u00a34,000, and installing a combi boiler along with new central heating costs between \u00a34,200 and \u00a37,500.",
+    "quote_short": "Gas combi boiler installation typically ranges between \u00a31,200 and \u00a34,000,",
+    "average_quote": "At a Glance The average boiler installation cost is around \u00a32,400 in the UK.",
+    "timeline_quote": "It typically takes 1 day for a heating engineer to install a new boiler.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/installing-a-new-boiler",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "bathroom",
+    "label": "new bathroom installation",
+    "keywords": [
+     "bathroom"
+    ],
+    "low": 3000,
+    "high": 15000,
+    "basis": "a full new bathroom, supplied and fitted",
+    "quote": "The cost of a new bathroom in the UK can vary a lot - from as little as \u00a33,000 to as much as \u00a315,000.",
+    "quote_short": "from as little as \u00a33,000 to as much as \u00a315,000",
+    "average_quote": "At a Glance The average new bathroom costs around \u00a37,000 to install in the UK.",
+    "timeline_quote": "Fitting a new bathroom typically takes between 6 and 8 days to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/full-bathroom-cost",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "radiator",
+    "label": "new radiator",
+    "keywords": [
+     "radiator"
+    ],
+    "low": 250,
+    "high": 350,
+    "basis": "one new radiator including materials",
+    "quote": "Expect the cost to install a new radiator to be between \u00a3250 and \u00a3350, including the radiator and required materials.",
+    "quote_short": "Expect the cost to install a new radiator to be between \u00a3250 and \u00a3350,",
+    "average_quote": "At a Glance The average radiator replacement cost is around \u00a3200 (per radiator).",
+    "timeline_quote": "Replacing a radiator usually takes 1 to 2 hours.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/remove-and-replace-a-radiator",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "toilet",
+    "label": "toilet replacement",
+    "keywords": [
+     "toilet",
+     "wc"
+    ],
+    "low": 200,
+    "high": 600,
+    "basis": "installing a new toilet",
+    "quote": "You'll typically pay between \u00a3200 and \u00a3600 to install a new toilet.",
+    "quote_short": "You'll typically pay between \u00a3200 and \u00a3600",
+    "average_quote": "At a Glance The average cost to replace a toilet is around \u00a3450.",
+    "timeline_quote": "Most jobs take around 4 hours to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/replace-a-toilet",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "water-softener",
+    "label": "water softener installation",
+    "keywords": [
+     "softener"
+    ],
+    "low": 940,
+    "high": 1900,
+    "basis": "a mid-range water softener, installed",
+    "quote": "On average, installing a mid-range water softener costs between \u00a3940 and \u00a31,900.",
+    "quote_short": "installing a mid-range water softener costs between \u00a3940 and \u00a31,900",
+    "average_quote": "At a Glance The average cost to install a water softener is \u00a31,250.",
+    "timeline_quote": "It usually takes between 2 and 4 hours to fit.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/water-softener-installation",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "central-heating",
+    "label": "central heating installation",
+    "keywords": [
+     "central heating",
+     "heating system",
+     "heating installation"
+    ],
+    "low": 3450,
+    "high": 5050,
+    "basis": "a full central heating installation",
+    "quote": "However, installation prices typically range between \u00a33,450 and \u00a35,050, depending on your boiler type, number of radiators, and pipework requirements.",
+    "quote_short": "installation prices typically range between \u00a33,450 and \u00a35,050,",
+    "average_quote": "At a Glance The average central heating installation cost is around \u00a34,250.",
+    "timeline_quote": "This type of job will take between 4 and 8 days to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/installing-central-heating",
+    "fetched": "2026-10-29"
+   }
+  ],
+  "roofer": [
+   {
+    "id": "new-roof",
+    "label": "full roof replacement",
+    "keywords": [
+     "new roof",
+     "re-roof",
+     "reroof",
+     "roof replacement",
+     "replacement roof"
+    ],
+    "low": 4250,
+    "high": 4750,
+    "basis": "a standard hip roof on a semi-detached house",
+    "quote": "For a semi-detached property, prices range from \u00a34,250 to \u00a34,750 for a standard hip roof and \u00a35,750 to \u00a36,250 where there are two valleys.",
+    "quote_short": "For a semi-detached property, prices range from \u00a34,250 to \u00a34,750",
+    "average_quote": "At a Glance The average new roof costs around \u00a35,250 in the UK.",
+    "timeline_quote": "It typically takes between 3 and 5 days to replace a roof.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/new-roof",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "flat-roof",
+    "label": "flat roof replacement",
+    "keywords": [
+     "flat roof",
+     "felt",
+     "grp",
+     "epdm",
+     "fibreglass",
+     "rubber"
+    ],
+    "low": 1500,
+    "high": 6000,
+    "basis": "an average flat roof replacement",
+    "quote": "In 2026, the average flat roof replacement costs between \u00a31,500 and \u00a36,000.",
+    "quote_short": "the average flat roof replacement costs between \u00a31,500 and \u00a36,000",
+    "average_quote": "At a Glance The average flat roof replacement cost is \u00a32,400.",
+    "timeline_quote": "Most jobs take 2 to 3 days to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/flat-roof-construction-cost",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "roof-repair",
+    "label": "small roof repair",
+    "keywords": [
+     "tile",
+     "slate",
+     "roof repair",
+     "repairs",
+     "repair"
+    ],
+    "low": 150,
+    "high": 200,
+    "basis": "a small repair (around 5 tiles)",
+    "quote": "Job Size Typical Cost Typical Timescale 5 Tiles (Small Repair) \u00a3150\u2013\u00a3200 3 hours 10 to 20 Tiles (Medium Repair) \u00a3200\u2013\u00a3275 1 day Full Re-Tile (80m\u00b2) \u00a33,000\u2013\u00a38,000 7 to 14 days Want a custom price?",
+    "quote_short": "5 Tiles (Small Repair) \u00a3150\u2013\u00a3200",
+    "average_quote": "At a Glance The average cost of replacing roof tiles is around \u00a3215.",
+    "timeline_quote": "It will take approximately 3 hours to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/replacing-roof-tiles",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "ridge",
+    "label": "ridge tile replacement",
+    "keywords": [
+     "ridge",
+     "dry ridge",
+     "bedding"
+    ],
+    "low": 225,
+    "high": 550,
+    "basis": "an average ridge tile replacement",
+    "quote": "In 2026, the average ridge tile replacement costs between \u00a3225 and \u00a3550.",
+    "quote_short": "the average ridge tile replacement costs between \u00a3225 and \u00a3550",
+    "average_quote": "At a Glance The average ridge tile replacement cost is \u00a3300.",
+    "timeline_quote": "Most jobs take 1 day or less to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/replacing-roof-ridge-tiles",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "gutters",
+    "label": "guttering replacement",
+    "keywords": [
+     "gutter",
+     "guttering"
+    ],
+    "low": 1000,
+    "high": 1600,
+    "basis": "an average gutter replacement",
+    "quote": "At a Glance The average gutter replacement cost in the UK is \u00a31,000 to \u00a31,600.",
+    "quote_short": "The average gutter replacement cost in the UK is \u00a31,000 to \u00a31,600",
+    "average_quote": "At a Glance The average gutter replacement cost in the UK is \u00a31,000 to \u00a31,600.",
+    "timeline_quote": "Most gutter replacement jobs take around 5 to 6 hours to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/replace-guttering",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "chimney",
+    "label": "chimney repointing",
+    "keywords": [
+     "chimney",
+     "repointing",
+     "stack"
+    ],
+    "low": 250,
+    "high": 350,
+    "basis": "repointing a standard chimney stack",
+    "quote": "Chimney repointing typically costs between \u00a3250 and \u00a3350 for a standard stack.",
+    "quote_short": "Chimney repointing typically costs between \u00a3250 and \u00a3350",
+    "average_quote": "At a Glance A chimney lead flashing patch repair typically costs around \u00a3200, while a full replacement averages around \u00a3570.",
+    "timeline_quote": "Patch repairs usually take 1 to 3 hours.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/replacing-leadwork-on-a-chimney",
+    "fetched": "2026-10-29"
+   }
+  ],
+  "builder": [
+   {
+    "id": "single-storey",
+    "label": "single-storey rear extension",
+    "keywords": [
+     "extension",
+     "single storey",
+     "single-storey",
+     "rear extension",
+     "side extension"
+    ],
+    "low": 30000,
+    "high": 40000,
+    "basis": "an average single-storey rear extension",
+    "quote": "The average single-storey rear extension cost in the UK is between \u00a330,000 and \u00a340,000, or \u00a31,800 per m\u00b2.",
+    "quote_short": "The average single-storey rear extension cost in the UK is between \u00a330,000 and \u00a340,000,",
+    "average_quote": "At a Glance The average cost of building a single-storey extension in the UK is \u00a335,000, or around \u00a31,700 per square metre.",
+    "timeline_quote": "Most single-storey extensions take around 12 weeks to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/single-story-extension",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "double-storey",
+    "label": "double-storey extension",
+    "keywords": [
+     "double storey",
+     "two storey",
+     "double-storey",
+     "two-storey"
+    ],
+    "low": 40000,
+    "high": 50000,
+    "basis": "a typical double-storey rear extension",
+    "quote": "Typical cost \u2014 \u00a340,000 to \u00a350,000 This extends the rear of a property, usually by extending into garden space.",
+    "quote_short": "Typical cost \u2014 \u00a340,000 to \u00a350,000",
+    "average_quote": "At a Glance The average two-storey extension costs \u00a360,000 in the UK.",
+    "timeline_quote": "Double-storey extensions take up to 14 weeks for builders to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/double-storey-extension",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "loft",
+    "label": "loft conversion",
+    "keywords": [
+     "loft",
+     "dormer"
+    ],
+    "low": 14000,
+    "high": 22000,
+    "basis": "a 20m\u00b2 Velux loft conversion",
+    "quote": "For a 20m\u00b2 Velux conversion, allow around \u00a314,000 to \u00a322,000, based on \u00a3700 to \u00a31,100 per m\u00b2.",
+    "quote_short": "For a 20m\u00b2 Velux conversion, allow around \u00a314,000 to \u00a322,000,",
+    "average_quote": "At a Glance The average cost of a loft conversion is \u00a340,000.",
+    "timeline_quote": "It will take about 4 to 10 weeks to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/loft-conversion",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "garage",
+    "label": "garage conversion",
+    "keywords": [
+     "garage"
+    ],
+    "low": 8000,
+    "high": 45000,
+    "basis": "a garage conversion",
+    "quote": "Garage conversion costs in the UK can range from \u00a38,000 to \u00a345,000 in 2026, the average standard garage conversion is \u00a314,500.",
+    "quote_short": "Garage conversion costs in the UK can range from \u00a38,000 to \u00a345,000",
+    "average_quote": "At a Glance The average cost for a garage conversion is \u00a314,500.",
+    "timeline_quote": "Garage conversions typically take around 4 weeks to finish.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/garage-conversion-cost",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "kitchen-ext",
+    "label": "kitchen extension",
+    "keywords": [
+     "kitchen extension"
+    ],
+    "low": 40000,
+    "high": 70000,
+    "basis": "a fully completed kitchen extension",
+    "quote": "Most kitchen extensions cost between \u00a340,000 and \u00a370,000, with an average of around \u00a350,000 for a fully completed project in 2026.",
+    "quote_short": "Most kitchen extensions cost between \u00a340,000 and \u00a370,000,",
+    "average_quote": "At a Glance The average kitchen extension cost is around \u00a350,000 in the UK.",
+    "timeline_quote": "Completing a kitchen extension typically takes between 5 and 10 weeks.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/kitchen-extension",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "porch",
+    "label": "porch",
+    "keywords": [
+     "porch"
+    ],
+    "low": 2800,
+    "high": 4000,
+    "basis": "a lean-to uPVC porch",
+    "quote": "Porch Prices by Type Porch Type Average Cost Duration Lean-to uPVC porch \u00a32,800\u2013\u00a34,000 1 to 2 weeks Flat gable roof porch \u00a33,500\u2013\u00a34,800 1 to 2 weeks Gable uPVC roof porch \u00a32,800\u2013\u00a34,000 1 to 2 weeks Edwardian uPVC porch \u00a33,800\u2013\u00a35,200 1 to 2 weeks Brick porch \u00a35,500\u2013\u00a38,000 1 to 2 weeks Aluminium porch \u00a33,200\u2013\u00a34,500 3 to 5 days Want a custom price?",
+    "quote_short": "Lean-to uPVC porch \u00a32,800\u2013\u00a34,000",
+    "average_quote": "At a Glance The average cost of building a porch that's 3m\u00b2 is \u00a34,500.",
+    "timeline_quote": "It typically takes 2 weeks to build a new porch.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/build-a-porch",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "underpinning",
+    "label": "underpinning",
+    "keywords": [
+     "underpin",
+     "foundation"
+    ],
+    "low": 6000,
+    "high": 21000,
+    "basis": "underpinning a house",
+    "quote": "Underpinning a house typically costs between \u00a36,000 and \u00a321,000 in the UK.",
+    "quote_short": "Underpinning a house typically costs between \u00a36,000 and \u00a321,000",
+    "average_quote": "At a Glance The average cost of underpinning is \u00a313,500 in the UK.",
+    "timeline_quote": "The job will typically take 3 to 5 weeks to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/underpinning-a-house",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "rsj",
+    "label": "steel beam (RSJ) / knock-through",
+    "keywords": [
+     "rsj",
+     "steel",
+     "knock through",
+     "knock-through",
+     "wall removal",
+     "open plan"
+    ],
+    "low": 800,
+    "high": 2500,
+    "basis": "a standard RSJ project",
+    "quote": "The prices vary, but essentially you can expect to pay between \u00a3800 and \u00a32,500 in total for a standard project, with an average cost of around \u00a31,400.",
+    "quote_short": "The prices vary, but essentially you can expect to pay between \u00a3800 and \u00a32,500",
+    "average_quote": "At a Glance The average RSJ cost is around \u00a31,400 in the UK.",
+    "timeline_quote": "The job will usually take between 1 to 2 days.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/installing-rsj",
+    "fetched": "2026-10-29"
+   }
+  ],
+  "electrician": [
+   {
+    "id": "rewire",
+    "label": "full house rewire",
+    "keywords": [
+     "rewire",
+     "rewiring"
+    ],
+    "low": 2500,
+    "high": 12500,
+    "basis": "a full house rewire, by property size",
+    "quote": "The total cost to rewire a house in 2026 ranges between \u00a32,500 and \u00a312,500 depending on the size of property.",
+    "quote_short": "The total cost to rewire a house in 2026 ranges between \u00a32,500 and \u00a312,500",
+    "average_quote": "At a Glance The average cost to rewire a house is around \u00a35,500.",
+    "timeline_quote": "Most jobs take 3 to 7 days.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/rewiring-a-house",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "consumer-unit",
+    "label": "consumer unit replacement",
+    "keywords": [
+     "consumer unit",
+     "fuse box",
+     "fuseboard",
+     "distribution board"
+    ],
+    "low": 470,
+    "high": 650,
+    "basis": "a 10-circuit consumer unit",
+    "quote": "Most homes require a 10-circuit consumer unit, which typically costs \u00a3470 to \u00a3650.",
+    "quote_short": "Most homes require a 10-circuit consumer unit, which typically costs \u00a3470 to \u00a3650",
+    "average_quote": "At a Glance The average consumer unit replacement cost is \u00a3525.",
+    "timeline_quote": "This job will take around 1 day to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/replace-a-fuse-box",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "eicr",
+    "label": "electrical inspection (EICR)",
+    "keywords": [
+     "eicr",
+     "inspection",
+     "testing",
+     "certificate",
+     "condition report"
+    ],
+    "low": 150,
+    "high": 250,
+    "basis": "an inspection of a standard home",
+    "quote": "The cost of an electrical inspection in the UK is typically between \u00a3150 and \u00a3250 for a standard home, increasing for larger properties or more complex systems.",
+    "quote_short": "The cost of an electrical inspection in the UK is typically between \u00a3150 and \u00a3250",
+    "average_quote": "At a Glance An EICR certificate costs around \u00a3180 for an average-sized home in the UK.",
+    "timeline_quote": "An electrician will typically take between 1 and 4 hours to complete this job.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/electrical-safety-certificate",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "sockets",
+    "label": "new socket",
+    "keywords": [
+     "socket"
+    ],
+    "low": 120,
+    "high": 250,
+    "basis": "one new socket in a new location",
+    "quote": "Installing a new socket in a different location costs between \u00a3120 and \u00a3250.",
+    "quote_short": "Installing a new socket in a different location costs between \u00a3120 and \u00a3250",
+    "average_quote": "Average Cost of Installing Plug Sockets: Depending on the complexity of the job, it usually takes: 1 \u2013 2 hours \u00a375 Table of Contents How Much Does It Cost to Install or Replace a Plug Socket?",
+    "timeline_quote": "The job takes approximately 1 to 2 hours to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/new-plug-sockets",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "downlights",
+    "label": "spotlights and downlights",
+    "keywords": [
+     "downlight",
+     "spotlight",
+     "lighting",
+     "lights"
+    ],
+    "low": 300,
+    "high": 500,
+    "basis": "installing spotlights and downlights",
+    "quote": "The average cost for installing spotlights and downlights is around \u00a3300 to \u00a3500.",
+    "quote_short": "The average cost for installing spotlights and downlights is around \u00a3300 to \u00a3500",
+    "average_quote": "At a Glance The average cost of installing spotlights is \u00a3400.",
+    "timeline_quote": "It usually takes between 2 and 4 hours to install spotlights.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/fitting-spotlights-and-downlights",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "outdoor-lighting",
+    "label": "outdoor lighting",
+    "keywords": [
+     "outdoor",
+     "garden lighting",
+     "external lighting",
+     "security light"
+    ],
+    "low": 120,
+    "high": 200,
+    "basis": "low-voltage outdoor lighting",
+    "quote": "Type of Lighting Average Cost Low-voltage outdoor lighting \u00a3120\u2013\u00a3200 1 outdoor 30-watt security light \u00a3120\u2013\u00a3180 Floodlights \u00a380\u2013\u00a3180 Landscape lights \u00a380\u2013\u00a31,100 Spotlights \u00a380\u2013\u00a3500 Rope lights \u00a3100\u2013\u00a3300 Patio lighting \u00a3150\u2013\u00a3450 Want a custom price?",
+    "quote_short": "Low-voltage outdoor lighting \u00a3120\u2013\u00a3200",
+    "average_quote": "At a Glance The average cost to install outdoor lighting is around \u00a3200.",
+    "timeline_quote": "The job will take approximately 1 to 3 hours to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/installing-outdoor-lighting",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "cctv",
+    "label": "CCTV installation",
+    "keywords": [
+     "cctv",
+     "camera",
+     "security"
+    ],
+    "low": 350,
+    "high": 1400,
+    "basis": "a CCTV system, by number of cameras",
+    "quote": "For this type of setup, you should expect CCTV installation costs to be between \u00a3350 and \u00a31,400, depending on the number of cameras and whether the system is wired or wireless.",
+    "quote_short": "For this type of setup, you should expect CCTV installation costs to be between \u00a3350 and \u00a31,400,",
+    "average_quote": "At a Glance The average cost of CCTV installation is \u00a3700.",
+    "timeline_quote": null,
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/installing-cctv",
+    "fetched": "2026-10-29"
+   }
+  ],
+  "bathroom fitter": [
+   {
+    "id": "bathroom",
+    "label": "new bathroom installation",
+    "keywords": [
+     "bathroom",
+     "full bathroom",
+     "complete bathroom"
+    ],
+    "low": 3000,
+    "high": 15000,
+    "basis": "a full new bathroom, supplied and fitted",
+    "quote": "The cost of a new bathroom in the UK can vary a lot - from as little as \u00a33,000 to as much as \u00a315,000.",
+    "quote_short": "from as little as \u00a33,000 to as much as \u00a315,000",
+    "average_quote": "At a Glance The average new bathroom costs around \u00a37,000 to install in the UK.",
+    "timeline_quote": "Fitting a new bathroom typically takes between 6 and 8 days to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/full-bathroom-cost",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "wet-room",
+    "label": "wet room",
+    "keywords": [
+     "wet room",
+     "wetroom"
+    ],
+    "low": 4000,
+    "high": 7000,
+    "basis": "a wet room",
+    "quote": "For a wet room, you can expect to pay between \u00a34,000 and \u00a37,000.",
+    "quote_short": "For a wet room, you can expect to pay between \u00a34,000 and \u00a37,000",
+    "average_quote": "At a Glance The average wet room installation cost is around \u00a35,500.",
+    "timeline_quote": "Most wet room installations take 4 to 7 days to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/wet-room-cost",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "walk-in-shower",
+    "label": "bath to walk-in shower",
+    "keywords": [
+     "walk-in",
+     "walk in",
+     "shower"
+    ],
+    "low": 1000,
+    "high": 5000,
+    "basis": "replacing a bath with a walk-in shower",
+    "quote": "At a Glance The average cost to replace a bath with a walk-in shower is \u00a31,000 to \u00a35,000.",
+    "quote_short": "The average cost to replace a bath with a walk-in shower is \u00a31,000 to \u00a35,000",
+    "average_quote": "At a Glance The average cost to replace a bath with a walk-in shower is \u00a31,000 to \u00a35,000.",
+    "timeline_quote": "It will take about 1 to 3 days to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/replace-bath-with-walk-in-shower",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "cloakroom",
+    "label": "downstairs toilet / cloakroom",
+    "keywords": [
+     "cloakroom",
+     "downstairs toilet",
+     "downstairs wc"
+    ],
+    "low": 2000,
+    "high": 4000,
+    "basis": "a new downstairs toilet",
+    "quote": "The average cost to install a downstairs toilet in the UK is \u00a32,000 to \u00a34,000, covering labour, sanitaryware, and finishing.",
+    "quote_short": "The average cost to install a downstairs toilet in the UK is \u00a32,000 to \u00a34,000,",
+    "average_quote": "At a Glance The average cost to fit a downstairs toilet is around \u00a33,000.",
+    "timeline_quote": "The job will take approximately 7 to 10 days to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/installing-downstairs-toilet",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "tiling",
+    "label": "bathroom tiling",
+    "keywords": [
+     "tiling",
+     "tiles",
+     "tiled"
+    ],
+    "low": 500,
+    "high": 800,
+    "basis": "tiling a bathroom",
+    "quote": "Most homeowners pay \u00a3500 to \u00a3800 to tile a bathroom in the UK, depending on the tile type, the area being tiled, and the amount of preparation work required.",
+    "quote_short": "Most homeowners pay \u00a3500 to \u00a3800",
+    "average_quote": "At a Glance Average cost of tiling a bathroom is \u00a3750.",
+    "timeline_quote": "It will take roughly 4 days to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/tiling-a-bathroom",
+    "fetched": "2026-10-29"
+   },
+   {
+    "id": "walk-in-bath",
+    "label": "walk-in bath",
+    "keywords": [
+     "walk-in bath",
+     "accessible",
+     "mobility",
+     "disabled"
+    ],
+    "low": 2700,
+    "high": 4750,
+    "basis": "an installed walk-in bath",
+    "quote": "Typical walk-in bath costs range from around \u00a32,700 to \u00a34,750, depending on the type of bath, its size, the materials used, and any additional features.",
+    "quote_short": "Typical walk-in bath costs range from around \u00a32,700 to \u00a34,750,",
+    "average_quote": "At a Glance The average cost to install a walk-in bath is \u00a33,000.",
+    "timeline_quote": "It will take about 2 to 5 days to complete.",
+    "source": "MyJobQuote cost guide",
+    "url": "https://www.myjobquote.co.uk/costs/walk-in-bath-cost",
+    "fetched": "2026-10-29"
+   }
+  ]
+ }
+}

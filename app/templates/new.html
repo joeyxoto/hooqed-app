@@ -1,0 +1,6 @@
+{% extends "base.html" %}{% block title %}New Hooq · Hooqed{% endblock %}
+{% block main %}<div class="m8gh"><div><p class="m8ml">New Hooq</p><h4>Paste your website</h4><p class="m8src">{{ ic.globe }}We read your site and draft your hooq: services, prices, brand, questions and result page.</p></div></div>
+<form class="m8pn hq-sec" method="post" action="/new" style="max-width:720px"><p class="m8ml">{{ ic['ml:Services found'] }}Your website address</p>
+<div class="hq-row"><input class="hq-in" name="url" placeholder="yourbusiness.com" required style="flex:1;min-width:220px" autofocus>
+<div class="m8acts" style="margin:0"><button class="m8-pub" type="submit">Build my hooq</button></div></div>
+{% if error %}<p class="hq-err">{{ error }}</p>{% endif %}<p class="hq-note">Takes a few minutes. You check everything before anything goes live.</p></form>{% endblock %}

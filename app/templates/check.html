@@ -1,0 +1,52 @@
+{% extends "base.html" %}{% block title %}Owner check · {{ h.name }}{% endblock %}
+{% block main %}<form method="post" action="/hooq/{{ h.id }}/check" enctype="multipart/form-data">
+<div class="m8gh"><div><p class="m8ml">Owner check</p><h4>{{ h.name }}</h4><p class="m8src">{{ ic.globe }}A few quick checks. Nothing goes live until you publish.</p></div>
+<div class="m8acts" style="margin:0"><a href="/hooq/{{ h.id }}/preview/" target="_blank">Review</a><button class="m8-pub" type="submit">Save and update</button></div></div>
+
+<div class="hq-grid2 hq-sec">
+<div class="m8pn"><p class="m8ml">{{ ic['ml:Brand, from the logo'] }}1. Is this your logo?</p>
+ <div class="hq-tiles">
+  <label class="hq-pick"><input type="radio" name="logo" value="keep" checked><div class="m8logo">{% if br.logo_file %}<img src="/hooq/{{ h.id }}/preview/{{ br.logo_file }}" alt="">{% else %}<b>{{ hq.shortName }}</b>{% endif %}</div><small>Yes, that's my logo</small></label>
+  {% for c in cands %}<label class="hq-pick"><input type="radio" name="logo" value="{{ c.url }}"><div class="m8logo"><img src="{{ c.url }}" alt=""></div><small>{{ (c.alt or c.url.split('/')[-1])[:34] }}</small></label>{% endfor %}
+  <label class="hq-pick"><input type="radio" name="logo" value="wordmark"><div class="m8logo"><b>{{ hq.shortName }}</b></div><small>Use my name as text</small></label>
+ </div></div>
+
+<div class="m8pn"><p class="m8ml">{{ ic['ml:Brand, from the logo'] }}2. Your brand colour</p>
+ <ul class="m8sw" style="grid-template-columns:repeat(5,1fr)">{% for c in swatches %}<li><label class="hq-pick"><input type="radio" name="colour" value="{{ c.hex }}" {{ 'checked' if c.hex==br.primary }}><i style="--c:{{ c.hex }}"></i><span>{{ c.source }}</span><code>{{ c.hex }}</code></label></li>{% endfor %}</ul>
+ <label class="hq-lab">Or type your colour (#rrggbb)</label><input class="hq-in sm" name="colour_custom" placeholder="#1f2a44" pattern="#[0-9a-fA-F]{6}">
+ <p class="hq-note">{% if 'owner' in (br.colour_source or '') %}Your colour: {{ br.primary }}.{% else %}We picked {{ br.primary }} from {{ br.colour_source }}.{% endif %}</p></div>
+
+<div class="m8pn"><p class="m8ml">{{ ic['ml:Services found'] }}3. Badges</p>
+ {% if chips %}<ul class="m8chips" style="min-height:0">{% for c in chips %}<li style="background:none;box-shadow:none;padding:0"><label class="hq-pick"><input type="checkbox" name="chip_keep" value="{{ c }}" checked>{{ ic.check }}{{ c }}</label></li>{% endfor %}</ul>
+ <p class="hq-note">Tap a badge to remove it.</p>{% else %}<p class="hq-note">No badges found that we can show exactly as your site words them. That is fine.</p>{% endif %}
+ {% if chips_removed %}<p class="hq-note">Removed: {{ chips_removed|join(', ') }}</p>{% endif %}</div>
+
+<div class="m8pn"><p class="m8ml">{{ ic.cal }}4. Booking link</p>
+ <input class="hq-in" name="booking_url" type="url" placeholder="https://calendly.com/you/call" value="{{ h.booking_url or '' }}">
+ <p class="hq-note">Paste your Calendly, iClosed, Cal.com or any booking page link. Calendly, iClosed and Cal.com get the visitor's name and email filled in. Leave empty to offer call-me-back and text only.</p></div>
+</div>
+
+<div class="m8pn hq-sec"><p class="m8ml">{{ ic['ml:Building your Hooq'] }}5. Services and prices</p>
+ <label class="hq-row" style="margin-bottom:10px;font-size:13px;color:var(--tx2)"><input type="checkbox" name="hide_all" value="1" {{ 'checked' if hide_all }}> Prefer not to show a price (visitors get a job summary and book a call)</label>
+ <dl class="m8ans hq-prices">{% for j in jobs %}<div><dt><label class="hq-row"><input type="checkbox" name="show_{{ j.id }}" value="1" {{ '' if j.removed else 'checked' }}> {{ j.label }}</label></dt><dd>
+  {% if j.mode in ('site','table') %}Your site: <b>{{ j.figure }}</b>{% if j.quote %}<br><span class="hq-note">“{{ j.quote[:160] }}”</span>{% endif %}
+  {% elif j.mode=='owner' %}Your range: <b>{{ j.figure }}</b>
+  {% elif j.mode=='confirm' %}<span class="hq-note">Your site says: “{{ j.quote[:160] }}” We weren't sure which figure fits, so no price shows yet.</span>
+  {% else %}<span class="hq-note">No price found on your site.</span>{% endif %}
+  <div class="hq-row"><select class="hq-in sm" name="price_{{ j.id }}" style="width:auto">
+   <option value="keep" {{ 'selected' if not j.o }}>{{ 'Keep as is' if j.mode in ('site','table','owner') else 'No price' }}</option>
+   <option value="range" {{ 'selected' if j.o.low }}>{{ 'Add your typical range' if j.mode not in ('site','table','owner') else 'Use my own range' }}</option>
+   <option value="hide" {{ 'selected' if j.o.hide }}>Prefer not to show a price</option></select>
+   <span class="hq-note" style="margin:0">{{ sym }}</span><input class="hq-in sm" name="low_{{ j.id }}" inputmode="numeric" placeholder="low" value="{{ j.o.low or '' }}"><span class="hq-note" style="margin:0">to</span><input class="hq-in sm" name="high_{{ j.id }}" inputmode="numeric" placeholder="high" value="{{ j.o.high or '' }}"></div>
+ </dd></div>{% endfor %}</dl>
+ <p class="hq-note">Untick a service to leave it out. Ranges you type show as “your own price range”.</p></div>
+
+<div class="m8pn hq-sec"><p class="m8ml">{{ ic['ml:Brand, from the logo'] }}6. Photos</p>
+ {% for p in photos %}<div class="hq-photo"><img src="/hooq/{{ h.id }}/preview/images/{{ p.id }}.jpg?v={{ h.finished }}" alt=""><div><b style="font-size:13.5px">{{ p.label }}</b> {% if p.own %}<span class="m8-pl m8-bk" style="margin-left:6px">Your photo</span>{% endif %}
+  <div class="hq-row" style="margin-top:6px"><input type="file" name="photo_{{ p.id }}" accept="image/jpeg,image/png,image/webp">{% if p.own %}<label class="hq-note" style="margin:0"><input type="checkbox" name="photo_reset_{{ p.id }}" value="1"> Go back to the generated photo</label>{% endif %}</div></div></div>{% endfor %}
+ <p class="hq-note">Use your own photo instead of the generated one (JPG, PNG or WebP).</p></div>
+
+<div class="m8acts"><a href="/hooq/{{ h.id }}/preview/" target="_blank">Review</a><button class="m8-pub" type="submit">Save and update</button></div>
+</form>
+{% if h.published %}<p class="hq-note">Live at <a href="/h/{{ h.slug }}/" target="_blank" style="text-decoration:underline">/h/{{ h.slug }}/</a>. Saving updates the live hooq too.</p>{% endif %}
+{% endblock %}

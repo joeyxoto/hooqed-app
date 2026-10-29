@@ -1,0 +1,24 @@
+{% extends "base.html" %}{% block title %}Dashboard · Hooqed{% endblock %}
+{% block main %}<div class="m8ph"><div><p class="m8ml">Dashboard</p><h4>Your hooqs</h4></div><div class="m8acts" style="margin:0"><a href="/new" class="m8-pub">New hooq</a></div></div>
+{% if hooqs %}<div class="hq-hooqs">{% for h in hooqs %}<div class="m8-kc" style="margin:0"><div class="m8-kt"><b>{{ h.name }}</b></div>
+ <p class="m8-ks">{{ h.url.split('//')[-1].strip('/') }}{% if h.cost_p %} · AI cost {{ '%.1f'|format(h.cost_p) }}p{% endif %}</p>
+ <div class="m8-kf"><span class="m8-sd {{ 'm8-ok' if h.published else ('m8-bk' if h.status=='ready' else ('m8-hot' if h.status=='failed' else 'm8-warm')) }}">{{ 'Live' if h.published else ('Ready to check' if h.status=='ready' else h.status|capitalize) }}</span>
+ <span class="hq-row" style="gap:10px;font-size:12.5px">{% if h.status=='ready' %}<a href="/hooq/{{ h.id }}/check" style="color:var(--tx2)">Edit</a>{% if h.published %}<a href="/hooq/{{ h.id }}/share" style="color:var(--tx2)">Share</a><a href="/h/{{ h.slug }}/" target="_blank" style="color:var(--vio)">Open</a>{% endif %}{% else %}<a href="/hooq/{{ h.id }}/build" style="color:var(--tx2)">Progress</a>{% endif %}</span></div></div>{% endfor %}</div>
+{% else %}<div class="m8pn"><p class="hq-empty">No hooqs yet. <a href="/new" style="color:var(--vio)">Build your first one</a>.</p></div>{% endif %}
+
+<div class="m8ph hq-sec" id="leads" style="margin-top:28px"><div><p class="m8ml">Leads</p><h4>{{ leads|length }} lead{{ '' if leads|length==1 else 's' }}</h4></div></div>
+{% if leads %}{% set cols = [('New enquiry','', '#7C8BA8'), ('Call me back','call me back','#F4B642'), ('Picked a time','picked a time','#A18BFF'), ('Text me','text me','#5BD6A0')] %}
+<div class="m8pg m8pipe" data-moved="1"><div class="m8brd"><div class="m8-kcols" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+{% for title, key, colr in cols %} <div class="m8-kcol" style="--sd:{{ colr }}"><div class="m8-kh"><span class="m8-dot"></span>{{ title }}<b>{{ counts[title] }}</b></div>
+ {% for l in leads %}{% if (key and l.action_detail and l.action_detail.startswith(key)) or (not key and not l.action_detail) or (key=='text me' and l.action_detail=='text me this') %}
+  <a class="m8-kc {{ 'hq-sel' if sel and sel.id==l.id }}" href="/dashboard?lead={{ l.id }}#leads" style="display:block"><div class="m8-kt"><span class="m8-av" style="--g:#B2A1FF,#7B62F0">{{ (l.name or '?')[:2]|upper }}</span><b>{{ l.name or 'No name' }}</b></div>
+  <p class="m8-ks">{{ l.label }} · {{ l.hname }}</p><div class="m8-kf"><span class="m8-sd m8-nu">{{ l.created|timefmt }}</span>{% if l.price %}<span class="m8-sc m8-md">{{ l.price }}</span>{% endif %}</div></a>{% endif %}{% endfor %}</div>
+{% endfor %}</div></div>
+{% if sel %}<div class="m8side"><div class="m8who"><span class="m8-av m8-xl" style="--g:#B2A1FF,#7B62F0">{{ (sel.name or '?')[:2]|upper }}</span><div><b>{{ sel.name }}</b><span>{{ sel.hname }} · {{ sel.label }}</span></div></div>
+ <div class="m8pills">{% if sel.action_detail %}<span class="m8-pl m8-bk">{{ ic.cal }}{{ sel.action_detail|capitalize }}</span>{% endif %}{% if sel.price %}<span class="m8-sc m8-md m8-wide">{{ sel.price }}</span>{% endif %}</div>
+ <p class="m8ml">Their answers</p><dl class="m8ans"><div><dt>Job</dt><dd>{{ sel.label }}</dd></div>{% for k,v in sel.ans %}<div><dt>{{ k }}</dt><dd>{{ v }}</dd></div>{% endfor %}
+  <div><dt>Phone</dt><dd>{{ sel.phone }}</dd></div><div><dt>Email</dt><dd>{{ sel.email or '—' }}</dd></div>{% if sel.postcode %}<div><dt>Postcode</dt><dd>{{ sel.postcode }}</dd></div>{% endif %}</dl>
+ <div class="m8next"><span class="m8-ai">{{ ic.bell }}</span><div><b>Lead brief</b><span>{{ sel.brief }}</span></div></div>
+ <p class="hq-note">{{ sel.created|timefmt }} · follow-up emails {{ 'sent' if sel.emailed else 'pending' }}</p></div>{% endif %}
+</div>{% else %}<div class="m8pn"><p class="hq-empty">No leads yet. Share your hooq link and they show up here.</p></div>{% endif %}
+{% endblock %}

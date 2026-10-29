@@ -1,0 +1,204 @@
+<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>__TITLE__</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<style>
+/* THEME: every colour, font, radius and spacing lives here (see THEMING.md). Brand values are filled per business; the on-* colours are contrast-checked (WCAG >= 4.5:1). */
+:root{
+ --brand:__BRAND__;--on-brand:__ON_BRAND__;--brand-deep:__DEEP__;--on-deep:__ON_DEEP__;--button:__BUTTON__;--on-button:__ON_BUTTON__;--accent-text:__ACCENT_TEXT__;
+ --ink:#14181a;--muted:#4c5250;--paper:#f4f3ee;--surface:#ffffff;--line:#d9d8d0;--ribbon:#ffd84d;--on-ribbon:#222;--header-bg:__HEADER_BG__;--on-header:__ON_HEADER__;
+ --font-display:'Barlow Condensed','Arial Narrow',Arial,sans-serif;--font-body:'DM Sans',Arial,sans-serif;--display-case:uppercase;--display-weight:800;
+ --radius-card:0px;--radius-button:0px;--radius-option:0px;--radius-chip:0px;
+ --space-page:clamp(18px,5vw,72px);--space-block:clamp(24px,5vw,64px);--gap:14px;--shadow-card:8px 8px 0 var(--brand);
+ --fs-hero:clamp(48px,7vw,104px);--fs-h2:clamp(38px,4.6vw,68px);--fs-body:16px;--header-h:68px}
+*{box-sizing:border-box}html,body{margin:0}body{font:var(--fs-body)/1.5 var(--font-body);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
+button,input{font:inherit;color:inherit}img{display:block;max-width:100%}
+.disp{font-family:var(--font-display);font-weight:var(--display-weight);text-transform:var(--display-case);line-height:.95;margin:0;letter-spacing:-.01em}
+.eyebrow{font:700 12.5px var(--font-body);letter-spacing:.14em;text-transform:uppercase;margin:0 0 12px;opacity:.9}
+[data-slot=header]{background:var(--header-bg);color:var(--on-header);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px var(--space-page);border-bottom:4px solid var(--brand);position:sticky;top:0;z-index:5}
+[data-slot=logo] img{height:40px;width:auto}[data-slot=logo] .wm{font:var(--display-weight) 24px var(--font-display);text-transform:var(--display-case);color:var(--on-header)}
+[data-slot=progress]{font:700 13px/1 var(--font-body);color:var(--muted);letter-spacing:.04em;white-space:nowrap}
+.drv{margin:14px 0 4px;font-size:14px;line-height:1.5}.drv .k{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;opacity:.8;margin-bottom:2px}
+.txm{margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:14px;color:var(--muted);text-align:center}.txm button{background:none;border:0;color:var(--accent-text);font:700 14px var(--font-body);text-decoration:underline;cursor:pointer;padding:4px}
+.tag{font:700 12px var(--font-body);letter-spacing:.12em;text-transform:uppercase;opacity:.8}
+/* intro */
+.intro{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);min-height:calc(100svh - var(--header-h));background:var(--brand);color:var(--on-brand)}
+.intro .copy{padding:var(--space-block) var(--space-page);display:flex;flex-direction:column;justify-content:center}
+.intro h1{font-size:var(--fs-hero)}.intro .sub{font-size:clamp(17px,1.5vw,20px);max-width:34ch;margin:20px 0 26px}
+.intro .ph{position:relative;min-height:320px}.intro .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 25%}
+.cta{display:inline-flex;align-items:center;justify-content:space-between;gap:18px;background:var(--surface);color:var(--ink);border:0;border-radius:var(--radius-button);padding:18px 24px;font:var(--display-weight) 22px var(--font-display);text-transform:var(--display-case);cursor:pointer;min-width:min(100%,320px)}
+.steps{display:flex;flex-wrap:wrap;gap:6px 18px;margin:18px 0 0;padding:0;list-style:none;font-size:14px}.steps li:before{content:"✓ ";font-weight:700}
+[data-slot=chips]{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.chip{border:1.5px solid currentColor;border-radius:var(--radius-chip);padding:6px 11px;font-size:13px;font-weight:500;line-height:1.25}
+[data-slot=review]{margin-top:24px;border-left:4px solid currentColor;padding:4px 0 4px 16px;max-width:46ch;font-size:15px}[data-slot=review] b{display:block;font-size:13px;margin-top:6px;font-weight:500;opacity:.9}
+/* questions */
+.q{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:24px clamp(24px,6vw,90px);padding:var(--space-block) var(--space-page);min-height:calc(100svh - var(--header-h));align-content:start}
+.qn{font:var(--display-weight) 60px var(--font-display);color:var(--accent-text);line-height:.9}.q h2{font-size:var(--fs-h2);margin-top:8px}.q .help{color:var(--muted);margin:12px 0 0;max-width:34ch}
+.back{background:none;border:0;padding:0;margin-top:16px;font-size:14px;text-decoration:underline;cursor:pointer;color:var(--muted)}
+.opts{border-top:3px solid var(--ink);margin:0;padding:0;list-style:none;min-width:0}
+.opt{display:flex;gap:16px;align-items:center;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #bdbcb3;border-radius:var(--radius-option);padding:19px 8px;cursor:pointer;min-width:0}
+.opt .ix{font:var(--display-weight) 28px var(--font-display);color:var(--accent-text);min-width:38px}.opt .t{font-weight:700;font-size:18px;display:block}.opt .d{font-size:14px;color:var(--muted);display:block}
+.opt .mk{margin-left:auto;width:24px;height:24px;border:2px solid #9a9a92;flex:none}
+.opt:hover,.opt.sel{background:var(--brand);color:var(--on-brand);padding-inline:16px}.opt:hover .ix,.opt.sel .ix,.opt:hover .d,.opt.sel .d{color:var(--on-brand)}.opt.sel .mk{background:var(--on-brand);border-color:var(--on-brand)}
+.f{display:grid;gap:12px}.f label{font-size:13px;font-weight:700}.f input[type=text],.f input[type=tel],.f input[type=email]{width:100%;border:2px solid #c9c8c0;border-radius:var(--radius-option);padding:13px;font-size:17px;background:var(--surface);margin-top:3px}
+.consent{display:flex;gap:9px;font-size:12.5px;color:var(--muted);align-items:flex-start}.consent input{margin-top:3px}
+.go{width:100%;background:var(--button);color:var(--on-button);border:0;border-radius:var(--radius-button);padding:17px;font:var(--display-weight) 22px var(--font-display);text-transform:var(--display-case);cursor:pointer}
+.demo{font-size:12px;color:#777;margin-top:8px;text-align:center}
+/* result */
+.res{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:calc(100svh - var(--header-h))}
+.rl{background:var(--brand-deep);color:var(--on-deep);display:flex;flex-direction:column}.rl .ph{height:230px;overflow:hidden}.rl .ph img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.rl .in{padding:28px var(--space-page) 36px}.rl h2{font-size:var(--fs-h2)}
+[data-slot=price]{background:var(--brand);color:var(--on-brand);border-radius:var(--radius-card);margin:20px 0 14px;padding:20px 22px}
+.k{font:700 12px var(--font-body);letter-spacing:.12em;text-transform:uppercase;opacity:.92}
+.v{font:var(--display-weight) clamp(42px,5.2vw,70px) var(--font-display);line-height:1;margin:8px 0 10px;white-space:nowrap}
+.ex{background:var(--ribbon);color:var(--on-ribbon);font:800 12px var(--font-body);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;display:inline-block;margin-bottom:10px}
+.own{background:rgba(0,0,0,.2);padding:8px 10px;margin:0 0 10px;font-size:14px}.n{font-size:13px;line-height:1.45}
+[data-slot=summary]{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.35);border-radius:var(--radius-card);margin:20px 0 14px;padding:18px 20px}
+[data-slot=summary] dl{margin:8px 0 0;display:grid;grid-template-columns:max-content 1fr;gap:6px 14px;font-size:15px}[data-slot=summary] dt{opacity:.8}[data-slot=summary] dd{margin:0;font-weight:700}
+.blk{margin:16px 0 0}.blk h4{font:700 12px var(--font-body);letter-spacing:.12em;text-transform:uppercase;margin:0 0 6px;opacity:.85}.blk p{margin:0;font-size:15px}.blk small{opacity:.75;font-size:12px}
+[data-slot=includes]{list-style:none;padding:0;margin:14px 0 16px}[data-slot=includes] li{padding:7px 0 7px 26px;position:relative;border-top:1px solid rgba(255,255,255,.18)}[data-slot=includes] li:before{content:"✓";position:absolute;left:2px;font-weight:700}
+.change{color:inherit;background:none;border:0;text-decoration:underline;padding:0;cursor:pointer;font-size:14px}
+.rr{padding:28px var(--space-page) 40px;background:var(--paper)}
+[data-slot=booking]{background:var(--surface);border:3px solid var(--ink);border-radius:var(--radius-card);padding:22px;box-shadow:var(--shadow-card);min-width:0}
+[data-slot=booking] h3{font-size:clamp(32px,3.4vw,46px)}.bs{color:var(--muted);margin:10px 0 16px;font-size:15px}
+.tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:2px solid var(--ink);margin-bottom:16px}.tabs button{background:var(--surface);border:0;border-right:2px solid var(--ink);padding:11px 4px;font-weight:700;font-size:14px;cursor:pointer}.tabs button:last-child{border-right:0}.tabs button.on{background:var(--ink);color:#fff}
+.days{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px}.day{border:1.5px solid var(--line);background:var(--surface);padding:8px 2px;text-align:center;cursor:pointer;line-height:1.15}.day b{display:block;font:800 22px var(--font-display)}.day small{font-size:11px;text-transform:uppercase;color:#666}
+.day.on,.tm.on{background:var(--button);border-color:var(--button);color:var(--on-button)}.day.on small{color:var(--on-button)}
+.times{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:10px 0 4px}.tm{border:1.5px solid var(--line);background:var(--surface);padding:10px 4px;cursor:pointer;font-weight:700}
+.slots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.wa{background:#f2f8f2;border:1.5px solid #cfe5d1;padding:14px;font-size:14.5px}
+.talk{background:transparent;border:2px solid currentColor;border-radius:999px;padding:11px 20px;font-family:inherit;font-size:15px;font-weight:700;color:inherit;text-decoration:none;cursor:pointer;opacity:1}.talk:hover{background:rgba(127,127,127,.12)}
+.pick{font-size:14px;font-weight:700;margin:10px 0 12px}
+[data-slot=about]{margin-top:22px;font-size:14.5px;color:var(--muted)}[data-slot=about] h4{font:var(--display-weight) 20px var(--font-display);text-transform:var(--display-case);margin:0 0 6px;color:var(--ink)}
+.sticky{display:none}#book{scroll-margin-top:84px}
+/* done */
+.done{min-height:calc(100svh - var(--header-h));background:var(--brand);color:var(--on-brand);padding:var(--space-block) var(--space-page);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-content:center}
+.done h2{font-size:clamp(46px,6vw,90px)}.done p{font-size:18px;max-width:36ch}.tick{width:80px;height:80px;background:var(--on-brand);color:var(--brand);display:grid;place-items:center;font:800 50px var(--font-display);margin-bottom:18px}
+.sum{background:var(--brand-deep);color:var(--on-deep);padding:18px;margin-top:16px;font-size:15px;max-width:440px}.sum b{display:block;font:800 22px var(--font-display);text-transform:var(--display-case)}
+[data-slot=owner-brief]{background:var(--surface);color:var(--ink);padding:20px;border-left:8px solid var(--brand-deep);align-self:center}[data-slot=owner-brief] p{font:500 15px/1.5 ui-monospace,Menlo,monospace;margin:0}
+[data-slot=footer]{display:flex;justify-content:space-between;gap:12px;padding:14px var(--space-page);font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);background:var(--surface)}
+@media (max-width:820px){
+ :root{--fs-hero:54px;--fs-h2:40px;--space-page:18px;--space-block:26px}
+ [data-slot=logo] img{height:32px}.tag{display:none}
+ .intro{grid-template-columns:1fr;min-height:0}.intro .ph{order:-1;min-height:0;height:220px}.cta{width:100%}
+ .q{grid-template-columns:1fr;gap:16px;min-height:0;padding-bottom:40px}.qn{font-size:46px}
+ .res{grid-template-columns:1fr}.rl .ph{height:180px}.rr{padding:20px 14px 90px}[data-slot=booking]{padding:18px 14px;box-shadow:6px 6px 0 var(--brand)}
+ .days{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .sticky{display:block;position:fixed;left:0;right:0;bottom:0;padding:10px 14px;background:var(--surface);border-top:2px solid var(--ink);z-index:6}.sticky button{width:100%;background:var(--button);color:var(--on-button);border:0;padding:14px;font:800 20px var(--font-display);text-transform:var(--display-case)}
+ .done{grid-template-columns:1fr;min-height:0}.done h2{font-size:50px}
+}
+</style></head><body>
+<header data-slot="header"><span data-slot="logo">__LOGO__</span><span class="tag" id="tag">Interactive quote</span><span data-slot="progress" id="prog"></span></header>
+<main id="app"></main>
+<footer data-slot="footer"><span>__NAME__ · __AREA__</span><span>Interactive quote by Hooqed</span></footer>
+<script>
+/* Content comes only from hooq.json (H). Each block renders into a named data-slot. */
+const H=__DATA__;
+const P=new URLSearchParams(location.search);
+const LC=H.locale||{symbol:"$",lang:"en-US",postal:"Postal code",hour12:false,phone_label:"Phone",msg_tab:"WhatsApp",country:"US"},BK=H.booking_kind==="appointment",CALL=BK?"appointment":"call",CON=H.booking_kind==="consult",JOBW=CON?"situation":"job";
+const SN=H.shortName,MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],DOW=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const TIMING=CON?{title:"When would you like to talk it through?",help:"No rush. This just helps "+SN+" plan the call.",options:[{id:"weeks",label:"In the next few weeks",desc:"Ready to talk it through",brief:"wants to talk in the next few weeks"},{id:"months",label:"Later on",desc:"Not yet, but soon",brief:"wants to talk later on"},{id:"planning",label:"Just looking",desc:"Getting an idea first",brief:"just looking"}]}:{title:"When are you looking to get this done?",help:"No rush. This just helps "+SN+" plan the call.",options:[{id:"weeks",label:"In the next few weeks",desc:"Ready to get it booked in",brief:"looking at the next few weeks"},{id:"months",label:"In the next few months",desc:"Planning ahead",brief:"looking at the next few months"},{id:"planning",label:"Just planning",desc:"Getting an idea first",brief:"just planning"}]};
+const OTHER={id:"other",label:"Something else",noun:"enquiry",desc:"Talk it through "+(BK?"at an appointment":"on a call"),brief:"something not in the list (to discuss)",questions:[],price:{mode:"none"},result:{title:"Let's talk it through",summary:CON?"Tell "+SN+" what is going on and talk it through on the call.":SN+" will listen to what you need and tell you straight whether it's a job they can take on.",includes:[]}};
+let S={step:0,a:{},tab:"cal",day:null,time:null,cb:null,name:P.get("name")||"",phone:P.get("phone")||"",email:P.get("email")||"",pc:""};
+(P.get("a")||"").split(",").filter(Boolean).forEach(kv=>{const[k,v]=kv.split(":");S.a[k]=v});
+const job=()=>S.a.job==="other"?OTHER:(H.jobs.find(j=>j.id===S.a.job)||null);
+function steps(){const j=job()||H.jobs[0];return ["job",...j.questions.map((q,i)=>"q"+i),"timing","contact"]}
+/* v7 possessive: Shaggy's stays Shaggy's, Builders -> Builders' */
+const pos=n=>/['’]s$/i.test(n)?n:/s$/i.test(n)?n+"'":n+"'s";
+const esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const gx=v=>LC.symbol+(+v).toLocaleString(LC.lang,{maximumFractionDigits:2});
+/* price rule (v4): the site's own figures exactly, or the owner's own typed range. Nothing else, no adjusting by answers. Otherwise no figure. */
+/* v4.1 price table: the visitor's answers must match exactly one published row; that row's figure is shown as written. No match: no figure. */
+function tableRow(p){if(p.picked){const hit=p.rows.filter(r=>Object.entries(r.when||{}).every(([k,v])=>v.includes(S.a[k])));return hit.length===1?hit[0]:null}if(p.list){const ot=p.opt_tokens,sel=new Set();Object.entries(S.a).filter(([k])=>p.relevant.includes(k)).forEach(([k,v])=>(ot[k+":"+v]||[]).forEach(t=>sel.add(t)));const hit=p.rows.filter(r=>r.req.length===sel.size&&r.req.every(t=>sel.has(t)));return hit.length===1?hit[0]:null}
+ const ot=p.opt_tokens,sel=new Set();const ans=Object.entries(S.a).filter(([k])=>/^q\d+$/.test(k));ans.forEach(([k,v])=>(ot[k+":"+v]||[]).forEach(t=>sel.add(t)));
+ const hit=p.rows.filter(r=>{const rowt=new Set([...r.req,...r.one_of]);if(!r.req.every(t=>sel.has(t)))return false;if(r.one_of.length&&!r.one_of.some(t=>sel.has(t)))return false;return ans.every(([k,v])=>(ot[k+":"+v]||[]).some(t=>rowt.has(t)))});return hit.length===1?hit[0]:null}
+function band(){const j=job();if(!j)return null;const p=j.price;if(p.mode==="table"){const r=tableRow(p);return r?{mode:"site",low:r.value,high:r.high||null,exact:!r.plus&&!r.high,from:!!r.plus&&!r.high,unit:r.unit||null,quote:r.quote,row:r.label,neutral:true}:{mode:"none"}}
+ if(!(p.mode==="site"||p.mode==="owner")||!p.low)return{mode:"none"};
+ return p.high?{mode:p.mode,low:p.low,high:p.high,hplus:!!p.high_plus,unit:p.unit||null,neutral:true}:{mode:p.mode,low:p.low,exact:p.flat!==false,from:p.flat===false,unit:p.unit||null,neutral:true}}
+function bandText(b){return b.high?gx(b.low)+" – "+gx(b.high)+(b.hplus?"+":""):b.from?"From "+gx(b.low):gx(b.low)}
+const fday=d=>LC.country==="US"||LC.country==="CA"?DOW[d.getDay()]+", "+MON[d.getMonth()]+" "+d.getDate():DOW[d.getDay()]+" "+d.getDate()+" "+MON[d.getMonth()];
+const ftime=t=>{if(!LC.hour12)return t;let[h,m]=t.split(":").map(Number);return (h%12||12)+":"+String(m).padStart(2,"0")+(h<12?" am":" pm")};
+function slots(){const out=[];let d=new Date();d.setHours(12);while(out.length<6){d=new Date(d.getTime()+864e5);if(d.getDay()%6)out.push(new Date(d))}return out}
+const TIMES=["09:00","10:30","12:00","14:00","15:30","17:00"],CB=["Morning","Afternoon","Evening","Any time"];
+function opt(o,i,key){return `<li><button class="opt ${S.a[key]===o.id?"sel":""}" data-k="${key}" data-v="${o.id}"><span class="ix">${String(i+1).padStart(2,"0")}</span><span><span class="t">${esc(o.label)}</span><span class="d">${esc(o.desc||"")}</span></span><span class="mk"></span></button></li>`}
+function prog(){const n=steps().length,on=S.step>=1&&S.step<=n;document.getElementById("prog").innerHTML=on?`<span class="stp">Step ${S.step} of ${n}</span>`:"";document.getElementById("tag").style.display=on?"none":""}
+const priced=()=>H.jobs.some(j=>j.price.mode==="site"||j.price.mode==="owner"||j.price.mode==="table");
+function intro(){const r=H.review,hk=H.hook;return `<section class="intro" data-slot="intro"><div class="copy"><p class="eyebrow" data-slot="hook.eyebrow">${esc(hk.eyebrow)}</p><h1 class="disp" data-slot="hook.headline">${esc(hk.headline)}</h1><p class="sub" data-slot="hook.sub">${esc(hk.sub)}</p>
+<div><button class="cta" data-go="1" data-slot="hook.cta">${esc(hk.cta)} <span>→</span></button></div><p style="margin:10px 0 0"><button class="talk" data-talk="1">I'd rather just talk →</button></p><ul class="steps" data-slot="steps"><li data-slot="duration">Takes about ${Math.max(20,Math.ceil(steps().length*6/10)*10)} seconds</li><li>${steps().length-1} quick taps</li><li>${H.jobs.every(j=>j.price.mode!=="none")?"Your price range":priced()?"Your guide price or job summary":"Your "+JOBW+" summary"}</li><li>Book ${BK?"an appointment":"a call"}</li></ul>
+<div data-slot="chips">${(H.chips||[]).map(c=>`<span class="chip">${esc(c)}</span>`).join("")}</div>${r?`<div data-slot="review">“${esc(r.quote)}”<b>${esc(r.by)} · review on ${esc(pos(SN))} website</b></div>`:H.rating?`<div data-slot="review">${/★/.test(H.rating)?"":"★ "}${esc(H.rating)}</div>`:""}</div>
+<div class="ph" data-slot="intro.photo"><img src="images/p-intro.jpg" alt=""></div></section>`}
+function question(){const st=steps()[S.step-1],n=S.step;let q,key,body;
+ if(st==="job"){q=CON?{title:"Which sounds most like your situation?",help:"Pick the one closest to yours."}:{title:"What do you need doing?",help:"Pick the job closest to yours."};key="job";body=`<ul class="opts">${[...H.jobs,OTHER].map((j,i)=>opt({id:j.id,label:j.label,desc:j.desc},i,"job")).join("")}</ul>`}
+ else if(st==="timing"){q=TIMING;key="timing";body=`<ul class="opts">${q.options.map((o,i)=>opt(o,i,key)).join("")}</ul>`}
+ else if(st==="contact"){const b=band();q={title:"Where should "+SN+" reach you?",help:b&&b.mode!=="none"?"Their price is on the next screen, with a time to book your "+CALL+".":"Your summary is on the next screen, with a time to book your "+CALL+"."};
+  body=`<form class="f" id="cf" data-slot="contact"><label>First name<input type="text" id="nm" required value="${esc(S.name)}"></label><label>${esc(LC.phone_label)}<input type="tel" id="mb" required></label><label>Email <span style="font-weight:400">(optional)</span><input type="email" id="em"></label>${CON?"":`<label>${esc(LC.postal)} <span style="font-weight:400">(optional)</span><input type="text" id="pc" maxlength="10" value="${esc(S.pc)}"></label>`}
+<label class="consent"><input type="checkbox" required> I agree to ${esc(SN)} contacting me about this enquiry.</label><button class="go" type="submit">${b&&b.mode!=="none"?"See the price":"See my summary"} →</button><p class="demo">Demo: nothing is sent.</p></form>`}
+ else {q=job().questions[+st.slice(1)];key=st;body=`<ul class="opts">${q.options.map((o,i)=>opt(o,i,key)).join("")}</ul>`}
+ return `<section class="q" data-slot="question"><div><div class="qn">${String(n).padStart(2,"0")}</div><h2 class="disp">${esc(q.title)}</h2><p class="help">${esc(q.help||"")}</p><button class="back" data-back="1">← ${n===1?"Start again":"Back"}</button>${st!=="contact"?` <button class="talk" data-talk="1">I'd rather just talk →</button>`:""}</div><div style="min-width:0">${body}</div></section>`}
+function picked(){const j=job(),out=[];j.questions.forEach((q,i)=>{const o=q.options.find(o=>o.id===S.a["q"+i]);if(o)out.push([q.short||q.title,o.label])});return out}
+function timingLabel(){const t=TIMING.options.find(o=>o.id===S.a.timing);return t?t.label:""}
+function bandNote(b,j){const fin=BK?"Your exact price is confirmed when you book.":"The exact price for your job is confirmed on the call.";if(b.mode==="site")return "This is "+pos(SN)+" own published price. Their website says: “"+esc(b.quote||j.price.site_quote)+"” "+fin;
+ return "This is "+pos(SN)+" own price range for this job. "+fin}
+/* v4.1: the owner's own booking widget (e.g. iClosed inline embed) replaces the demo calendar when the owner supplied one */
+/* v5.2 booking handoff: prefill the owner's widget with the name, email and phone the visitor already typed (iClosed, Calendly, Cal.com URL params) */
+const PREFILL={iclosed:{name:"iclosedName",email:"iclosedEmail",phone:"iclosedPhone"},calendly:{name:"name",email:"email"},calcom:{name:"name",email:"email"}};
+function embedKind(E){return E.kind||(/iclosed\.io/.test(E.url)?"iclosed":/calendly\.com/.test(E.url)?"calendly":/cal\.com/.test(E.url)?"calcom":"")}
+function embedUrl(E){const m=PREFILL[embedKind(E)];if(!m)return E.url;const add=[["name",S.name],["email",S.email],["phone",S.phone]].filter(([k,v])=>m[k]&&v).map(([k,v])=>m[k]+"="+encodeURIComponent(v)).join("&");return add?E.url+(E.url.includes("?")?"&":"?")+add:E.url}
+function embedCard(){const E=H.booking_embed,j=job();const hl=E.headline||(j&&j.id==="other"?"Book "+(BK?"an appointment":"a call")+" to discuss":H.booking.headline);
+ return `<div data-slot="booking" id="book"><h3 class="disp">${esc(hl)}</h3><p class="bs">${esc(H.booking.sub)}</p><div class="bk-embed ${E.kind==="iclosed"?"iclosed-widget":""}" data-url="${esc(embedUrl(E))}" title="${esc(E.title||"")}" style="width:100%;height:620px;border-radius:12px;overflow:hidden;background:#fff"></div>
+<p class="demo">${esc(E.note||"")} <a href="${esc(embedUrl(E))}" target="_blank" rel="noopener">Calendar not loading? Open it in a new tab</a></p></div>`}
+function loadEmbed(){const E=H.booking_embed,box=document.querySelector(".bk-embed");if(!E||!box||box.dataset.ld)return;box.dataset.ld="1";
+ const old=document.querySelector("script[data-embed]");if(old)old.remove();const sc=document.createElement("script");sc.src=E.script;sc.async=true;sc.dataset.embed="1";document.body.append(sc);
+ /* v5.1 safety net (same as the owner's own app): if the official widget script has not drawn its iframe after 8 s (e.g. widget.js serving an HTML page), build the iframe the way the widget does */
+ setTimeout(()=>{if(!box.isConnected||box.querySelector("iframe"))return;const u=new URL(embedUrl(E));u.searchParams.set("embedType","inline");u.searchParams.set("referrerUrl",location.href);const f=document.createElement("iframe");f.src=u.toString();f.title=E.title||"Booking calendar";f.style.cssText="width:100%;height:100%;border:0";f.setAttribute("sandbox","allow-scripts allow-downloads allow-same-origin allow-popups allow-forms allow-top-navigation allow-popups-to-escape-sandbox");box.dataset.fallback="1";box.append(f)},8000)}
+if(H.booking_embed)new MutationObserver(loadEmbed).observe(document.documentElement,{childList:true,subtree:true});
+function bookCard(){if(H.booking_embed)return embedCard();const ds=slots();if(S.day==null)S.day=0;const d=ds[S.day];let inner="";
+ if(S.tab==="cal")inner=`<div class="days">${ds.map((x,i)=>`<button class="day ${i===S.day?"on":""}" data-day="${i}"><small>${DOW[x.getDay()]}</small><b>${x.getDate()}</b><small>${MON[x.getMonth()]}</small></button>`).join("")}</div><div class="times">${TIMES.map(t=>`<button class="tm ${S.time===t?"on":""}" data-time="${t}">${ftime(t)}</button>`).join("")}</div><p class="pick">${S.time?`Your ${CALL}: ${fday(d)} at ${ftime(S.time)}`:BK?`Pick a time for your appointment.`:`Pick a time for ${esc(SN)} to call you.`}</p>`;
+ else if(S.tab==="cb")inner=`<p style="margin:0 0 8px;font-size:14.5px">${esc(SN)} calls you back when it suits you.</p><div class="slots">${CB.map(c=>`<button class="tm ${S.cb===c?"on":""}" data-cb="${c}">${c}</button>`).join("")}</div><p class="pick"></p>`;
+ else inner=`<div class="wa"><b>${LC.msg_tab==="WhatsApp"?"Prefer WhatsApp?":"Prefer a text?"}</b><br>${esc(SN)} will ${LC.msg_tab==="WhatsApp"?"message you on WhatsApp":"text you"} to arrange the ${CALL}.</div><p class="pick"></p>`;
+ const j=job();const hl=j&&j.id==="other"?"Book "+(BK?"an appointment":"a call")+" to discuss":(j&&j.price.mode==="none")?"Book your "+CALL+" with "+SN:H.booking.headline;
+ return `<div data-slot="booking" id="book"><h3 class="disp">${esc(hl)}</h3><p class="bs">${esc(H.booking.sub)}</p>
+<div class="tabs"><button class="${S.tab==="cal"?"on":""}" data-tab="cal">Pick a time</button><button class="${S.tab==="cb"?"on":""}" data-tab="cb">Call me back</button><button class="${S.tab==="wa"?"on":""}" data-tab="wa">${LC.msg_tab==="WhatsApp"?"WhatsApp":"Text"}</button></div>${inner}
+<button class="go" data-confirm="1">${S.tab==="wa"?(LC.msg_tab==="WhatsApp"?"Message me on WhatsApp":"Text me"):S.tab==="cb"?"Call me back":"Book my "+CALL} →</button><p class="demo">Demo: nothing is sent or booked.</p>${j&&j.id!=="other"?`<div data-slot="text-me" class="txm"><span>Not ready to book?</span> <button type="button" data-textme="1">${band().mode!=="none"?"Text me this range":"Text me my "+JOBW+" summary"}</button>${S.texted?`<p class="demo">Demo only: nothing is sent. Live, ${esc(SN)} texts this to your phone.</p>`:""}</div>`:""}</div>`}
+function priceBlock(j,b){return `<div data-slot="price">${H.example&&b.mode==="owner"?`<div class="ex">Example owner confirmation (simulated)</div>`:""}<div class="k">${b.mode==="site"?"Price from "+esc(pos(SN))+" website":esc(pos(SN))+" own price range"}</div><div class="v">${bandText(b)}${b.unit?` <small style="font-size:.45em">${esc(b.unit)}</small>`:""}</div>${b.row?`<div class="own">For ${esc(b.row.toLowerCase())}</div>`:j.price.basis&&j.price.mode!=="table"?`<div class="own">For ${esc(j.price.basis)}</div>`:""}<div class="n">${bandNote(b,j)}</div></div>`}
+function nextStep(j){if(j.id==="other")return OTHER.result.summary;if(H.booking_embed&&H.booking_embed.next)return H.booking_embed.next;
+ if(CON)return SN+" goes through your situation with you on the call.";if(BK)return SN+" confirms the time and anything they need to know before your appointment.";
+ return SN+" goes through your answers with you on the call and "+(band().mode!=="none"?"confirms the price for your job.":"gives you a price for your job.")}
+function summaryBlock(j){const tl=j.timeline;const rows=[[CON?"Situation":"Job",j.label],...picked(),["When",timingLabel()]].filter(r=>r[1]);if(S.pc)rows.push([LC.postal,S.pc.toUpperCase()]);
+ return `<div data-slot="summary"><div class="k">Your ${JOBW} summary</div><dl>${rows.map(r=>`<dt>${esc(r[0])}</dt><dd>${esc(r[1])}</dd>`).join("")}</dl></div>
+<div class="blk" data-slot="next-step"><h4>What happens next</h4><p>${esc(nextStep(j))}</p></div>
+${tl&&tl.text?`<div class="blk" data-slot="timeline"><h4>Typical timeline</h4><p>${esc(tl.text)}</p>${tl.source?`<small>Typical for this kind of job, not a promise. Source: ${esc(tl.source)}</small>`:`<small>Typical for this kind of job, not a promise.</small>`}</div>`:""}`}
+function drivers(j,pr){const rows=picked().slice(0,3);if(!rows.length||j.id==="other")return"";
+ return `<div data-slot="drivers" class="drv"><span class="k">${pr||CON?"Your answers":"What shapes the job"}</span> ${rows.map(r=>`<b>${esc(r[0])}:</b> ${esc(r[1])}`).join(" · ")}</div>`}
+function result(){const j=job(),b=band(),img=j.id==="other"?"p-intro":"p-"+j.id,pr=b.mode!=="none";
+ const title=j.id==="other"||CON?j.result.title:pr?j.result.title:"Your "+(j.noun||j.label.toLowerCase())+" summary";
+ const trust=[...(H.chips||[])].slice(0,4);
+ return `<section class="res" data-slot="result"><div class="rl"><div class="ph" data-slot="result.photo"><img src="images/${esc(img)}.jpg" alt=""></div><div class="in"><p class="eyebrow">${j.id==="other"?"Your enquiry":"Your "+esc(j.noun||j.label.toLowerCase())+(pr?" price":"")}</p><h2 class="disp" data-slot="result.title">${esc(title)}</h2>
+${pr?priceBlock(j,b):summaryBlock(j)}
+${drivers(j,pr)}
+${j.result.includes&&j.result.includes.length?`<ul data-slot="includes">${j.result.includes.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>`:""}
+${!pr&&trust.length?`<div class="blk" data-slot="trust"><h4>Why people choose ${esc(SN)}</h4><p>${trust.map(esc).join(" · ")}</p></div>`:""}<p style="margin-top:14px"><button class="change" data-change="1">← Change my answers</button></p></div></div>
+<div class="rr">${bookCard()}<div data-slot="about"><h4>${j.id==="other"?"About "+esc(SN):CON?"About this":"About the job"}</h4>${esc(j.result.summary)}${H.rating?`<p style="margin:10px 0 0;font-weight:700">${/★/.test(H.rating)?"":"★ "}${esc(H.rating)}</p>`:""}${H.review?`<p style="margin:10px 0 0">“${esc(H.review.quote)}” <b>${esc(H.review.by)}</b></p>`:""}</div></div></section><div class="sticky"><button data-scroll="1">Book my ${CALL} ↓</button></div>`}
+function slotText(){if(S.tab==="cb")return "wants a call back ("+(S.cb||"any time").toLowerCase()+")";if(S.tab==="wa")return LC.msg_tab==="WhatsApp"?"prefers WhatsApp":"prefers a text";const d=slots()[S.day||0];return CALL+" booked "+fday(d)+" "+ftime(S.time||TIMES[1])}
+function leadBrief(name){const j=job(),b=band(),parts=[name||S.name||"Sarah",j.brief];j.questions.forEach((q,i)=>{const o=q.options.find(o=>o.id===S.a["q"+i]);if(o)parts.push(o.brief)});
+ const t=TIMING.options.find(o=>o.id===S.a.timing);if(t)parts.push(t.brief);if(S.pc)parts.push(S.pc.toUpperCase());
+ if(!CON)parts.push(b.mode==="none"?"price to give "+(BK?"when booking":"on the call"):"shown "+bandText(b)+(j.price.unit?" "+j.price.unit:"")+" ("+(b.mode==="site"?"your published price":"your own range")+")");parts.push(slotText());return parts.join(", ")}
+function done(){const j=job(),b=band(),nm=S.name||"there";const how=S.tab==="cal"?(()=>{const d=slots()[S.day||0],w=fday(d)+" at "+ftime(S.time||TIMES[1]);return BK?"Your appointment request: "+w+". "+SN+" confirms it with you.":SN+" will call you on "+w+"."})():S.tab==="cb"?SN+" will call you back ("+(S.cb||"any time").toLowerCase()+").":SN+(LC.msg_tab==="WhatsApp"?" will message you on WhatsApp to arrange the ":" will text you to arrange the ")+CALL+".";
+ return `<section class="done" data-slot="done"><div><div class="tick">✓</div><h2 class="disp">You're booked in, ${esc(nm)}</h2><p>${esc(how)} ${BK||CON?"":`Have any photos of the job handy; it helps ${b.mode==="none"?"them price it":"confirm the price"}.`}</p><div class="sum"><b>${esc(j.label)}</b>${b.mode==="none"?(CON?"Talked through on the call":"Price confirmed "+(BK?"when you book":"on the call")):bandText(b)+(b.mode==="site"?" · their published price":" · their own range")}<br>${esc([...picked().map(x=>x[1]),timingLabel()].filter(Boolean).join(" · "))}</div><p class="demo" style="color:inherit;text-align:left">Demo: nothing was sent.</p></div>
+${P.get("owner")?`<div data-slot="owner-brief"><div class="k" style="color:var(--muted);margin-bottom:8px">What ${esc(SN)} receives</div><p>${esc(leadBrief())}</p></div>`:""}</section>`}
+function render(){const n=steps().length,app=document.getElementById("app");prog();
+ app.innerHTML=S.step===0?intro():S.step<=n?question():S.step===n+1?result():done();window.scrollTo(0,0)}
+document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
+ if(t.dataset.go){S.step=1;render()}else if(t.dataset.back){S.step--;render()}else if(t.dataset.change){S.step=1;render()}
+ else if(t.dataset.k){S.a[t.dataset.k]=t.dataset.v;render();setTimeout(()=>{S.step++;render()},180)}
+ else if(t.dataset.confirm){S.step=steps().length+2;render()}
+ else if(t.dataset.tab){S.tab=t.dataset.tab;render();document.getElementById("book").scrollIntoView()}
+ else if(t.dataset.day){S.day=+t.dataset.day;render();document.getElementById("book").scrollIntoView()}
+ else if(t.dataset.time){S.time=t.dataset.time;render();document.getElementById("book").scrollIntoView()}
+ else if(t.dataset.cb){S.cb=t.dataset.cb;render();document.getElementById("book").scrollIntoView()}
+ else if(t.dataset.textme){S.texted=1;render();document.getElementById("book").scrollIntoView()}
+ else if(t.dataset.talk){S.a={job:"other",timing:"planning"};S.step=steps().length;render()}
+ else if(t.dataset.scroll){document.getElementById("book").scrollIntoView({behavior:"smooth"})}});
+document.addEventListener("submit",e=>{e.preventDefault();S.name=document.getElementById("nm").value.trim();S.phone=(document.getElementById("mb").value||"").trim();S.email=(document.getElementById("em").value||"").trim();S.pc=CON?"":(document.getElementById("pc").value||"").trim();S.step=steps().length+1;render()});
+if(P.get("tab"))S.tab=P.get("tab");if(P.get("textme"))S.texted=1;if(P.get("d"))S.day=+P.get("d");if(P.get("t"))S.time=P.get("t");if(P.get("cb"))S.cb=P.get("cb");if(P.get("pc")&&!CON)S.pc=P.get("pc");
+const s=P.get("s");if(s==="q")S.step=+P.get("i");else if(s==="result")S.step=steps().length+1;else if(s==="done")S.step=steps().length+2;
+render();if(P.get("scroll")==="book")setTimeout(()=>document.getElementById("book").scrollIntoView(),50);
+window.leadBrief=leadBrief;window.__band=band;window.__S=S;
+</script></body></html>
