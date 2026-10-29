@@ -231,10 +231,53 @@ for pat, why in [(URG.pattern, "urgency wording left"),
                  (r"!", "exclamation"), (r"landing page|lead page", "banned term"), (r"peace of mind|look no further|one-stop", "cliché"), (r"\b(we|our|us)\b", "first person")]:
     if re.search(pat, blob, re.I): issues.append(why)
 if re.search(r"\bfree\b", blob, re.I) and "free" not in alltext: issues.append("'free' not on site")
-# photos: intro (main planned job) + one per job, max 6
-h["photos"] = [{"id": "p-intro", "scene": h["intro_scene"]}] + [{"id": "p-" + j["id"], "scene": j["scene"]} for j in jobs][:5]
-for ph in h["photos"]:
-    ph["prompt"] = f"Editorial documentary photograph, {L['name']}: {ph['scene']}. Wide shot with the subject centred in the middle of the frame; any person is fully in frame from head to feet with clear space above their head, nothing cut off at the edges. Realistic, natural daylight, 35mm, no text, no logos, no signage, no lettering on clothing or vehicles."
+# v8 PHOTOS: one strong intro photo of the offer being delivered, plus (quote flow) a photo only for jobs the writer marked as looking clearly
+# different, capped at 4 in total; person flow: intro + summary only. Never one per answer option. Other jobs reuse the intro photo.
+loc_ = f.get("location") or {}
+PLACES = [x for x in [L.get("name"), loc_.get("country"), loc_.get("area"), *(loc_.get("areas_served") or [])] if x and len(x) > 2]
+PLACE_RE = re.compile(r"\s*,?\s*\b(?:in|across|around|near|of|from|outside)\s+(?:the\s+|a\s+|an\s+)?(?:(?:typical|suburban|small|local|urban)\s+)?(?:" + "|".join(re.escape(x) for x in PLACES + ["United States", "USA", "the US", "UK", "United Kingdom", "Britain", "England", "Scotland", "Wales", "Canada", "Australia", "New Zealand", "Ireland"]) + r")\b(?:\s+(?:home|house|suburb|town|city|neighbou?rhood|office|street))?", re.I)
+def plain_scene(sc):
+    sc0 = re.sub(r"\s+", " ", (sc or "")).strip()
+    sc1 = PLACE_RE.sub("", sc0); sc1 = re.sub(r"\b(?:" + "|".join(re.escape(x) for x in PLACES) + r")\b\s*", "", sc1, flags=re.I) if PLACES else sc1
+    sc1 = re.sub(r"\s{2,}", " ", sc1).strip(" ,")
+    if sc1 != sc0: fixes.append(f"place name removed from a photo scene: '{sc0[:70]}'")
+    return sc1
+STYLE = ("Candid, photorealistic photograph of real people mid-action, natural unposed moment, close or medium shot, real available light, shallow depth of field, "
+         "varied off-centre composition, nothing looks staged or like a stock photo; faces and hands are not awkwardly cut off by the frame; everyone fully clothed. "
+         "No text, no logos, no signage, no brand names, no lettering on clothing, vehicles or screens, screens show nothing readable.")
+region = (h.get("regional_look") or "").strip() if isinstance(h.get("regional_look"), str) else ""
+if region and PLACE_RE.search(" in " + region): region = ""   # a look, never a place name
+photos = [{"id": "p-intro", "scene": plain_scene(h.get("intro_scene") or (jobs[0].get("scene") if jobs else "") or "")}]
+if FLOW == "person":
+    if h.get("summary_scene"): photos.append({"id": "p-summary", "scene": plain_scene(h["summary_scene"])})
+    for j in jobs: j["photo"] = photos[-1]["id"]
+else:
+    for j in jobs:
+        sc = j.get("scene") if isinstance(j.get("scene"), str) and j["scene"].strip().lower() not in ("", "null", "none") else None
+        if sc and len(photos) < 4: photos.append({"id": "p-" + j["id"], "scene": plain_scene(sc)}); j["photo"] = "p-" + j["id"]
+        else: j["photo"] = "p-intro"
+for ph in photos:
+    ph["prompt"] = f"{ph['scene'].rstrip('.')}." + (f" Setting: {region}." if region else "") + " " + STYLE
+h["photos"] = photos
+# v8 MULTI-SELECT: a question may take several answers only when no price depends on it: a price table / per-answer rows pick ONE row, so on
+# those jobs every question is single choice (prices are never summed or blended)
+def price_keys(pr):   # answer keys (q0, q1) that pick between price rows on this job; a single price applies whatever is ticked
+    if pr.get("mode") not in ("table", "confirm", "owner"): return set()
+    rows = pr.get("rows") or []
+    if len(rows) <= 1: return set()
+    ks = set(pr.get("relevant") or []) | {k.split(":")[0] for k in (pr.get("opt_tokens") or {})} | {k for r in rows for k in (r.get("when") or {})}
+    return ks or {"*"}   # several prices but no recorded link: assume every question can select one
+for j in jobs:
+    pk = price_keys(j["price"])
+    for qi, q in enumerate(j["questions"]):
+        q["multi"] = bool(q.get("multi"))
+        if q["multi"] and ("*" in pk or f"q{qi}" in pk):
+            q["multi"] = False; fixes.append(f"job {j['id']}: question '{q['id']}' made single choice (its answers pick a price row)")
+            if re.search(r"\b(every|all|everything|each|any)\b", q.get("help") or "", re.I): q["help"] = "Pick the closest one."
+# the CTA never counts taps (the step list does)
+for hk in ("hook", "hook_q"):
+    c_ = (h.get(hk) or {}).get("cta") or ""
+    if re.search(r"\btaps?\b|\bquiz\b|\bsubmit\b", c_, re.I): h[hk]["cta"] = "Let's start" if FLOW == "person" else "Start my quote"; fixes.append(f"{hk}.cta '{c_}' replaced (no tap counts / form words)")
 h["locale"] = {k: L[k] for k in ("country", "name", "lang", "currency", "symbol", "postal", "hour12", "phone_label", "msg_tab", "date_example")}
 # v4.1 booking wording: "appointment" only for appointment businesses (grooming, salons, clinics...), "call" for trades; copy made consistent
 APPT = re.compile(r"groom|salon|spa\b|barber|beaut|nail|lash|brow|wax|massage|dental|dentist|orthodont|clinic|vet\b|veterin|physio|chiro|osteo|therap|tutor|lesson|driving instructor|fitness|personal trainer|yoga|pilates|photograph|tattoo|optic|optom|hair", re.I)

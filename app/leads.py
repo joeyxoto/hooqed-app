@@ -23,9 +23,10 @@ def describe(hooq_row, lead):
     rows = []
     if job:
         for i, q in enumerate(job.get("questions", [])):
-            o = next((o for o in q["options"] if o["id"] == a.get(f"q{i}")), None)
-            if o:
-                rows.append((q.get("short") or q.get("title"), o["label"]))
+            v = a.get(f"q{i}"); ids = v if isinstance(v, list) else [v]   # v8 multi-select questions store a list of option ids
+            os_ = [o for o in q["options"] if o["id"] in ids]
+            if os_:
+                rows.append((q.get("short") or q.get("title"), ", ".join(o["label"] for o in os_)))
     m = re.search(r"shown (.+?) \((your published price|your own range)\)", lead["brief"] or "")
     return label, rows, (m.group(1) if m else ""), h.get("shortName") or hooq_row["name"]
 

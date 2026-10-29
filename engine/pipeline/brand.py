@@ -1,5 +1,6 @@
 import sys, json, io, requests, urllib.parse as U, colorsys
 from PIL import Image
+import fonts as fontsmod
 d = sys.argv[1]; s = json.load(open(f"{d}/scrape.json")); bh = s["brand_hints"]; host = U.urlparse(s["final_url"]).netloc
 H = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64) Chrome/130 Safari/537.36"}
 def fetch(u):
@@ -178,6 +179,13 @@ else:
                 R["buttons"] += [dict(b_, vw=vw) for b_ in pg.evaluate(CTA_JS)]
                 if vw == 1280:
                     R["bars"] = pg.evaluate(BARS_JS); R["logo"] = pg.evaluate(LOGO_JS); pg.screenshot(path=top_png)
+                    try:   # v8 FONT MATCH: the site's own heading / body / button type, as the browser painted it (+ crops for the side-by-side)
+                        R["fonts"] = pg.evaluate(fontsmod.FONTS_JS)
+                        for role in ("heading", "body"):
+                            bx_ = ((R["fonts"] or {}).get(role) or {}).get("box")
+                            if bx_ and bx_["w"] >= 20 and bx_["h"] >= 8:
+                                pg.screenshot(path=f"{d}/font-{role}.png", full_page=True, clip={"x": max(0, bx_["x"] - 4), "y": max(0, bx_["y"] - 4), "width": min(bx_["w"] + 8, 1270), "height": min(bx_["h"] + 8, 260)})
+                    except Exception as e_: R["fonts_error"] = str(e_)[:160]
                     bx = (R["logo"] or {}).get("box")
                     if bx and bx["w"] >= 24 and bx["y"] < 800:   # the mark exactly as painted on the page: last-resort logo when no file loads
                         try: pg.screenshot(path=f"{d}/render-logo.png", clip={"x": max(0, bx["x"]), "y": max(0, bx["y"]), "width": min(bx["w"], 1280), "height": min(bx["h"], 400)})
@@ -188,6 +196,23 @@ else:
             bz.close()
     except Exception as e: R["error"] = str(e)[:160]
     if R["bars"] or R["buttons"] or R["logo"]: json.dump(R, open(render_p, "w"), indent=1)
+if "fonts" not in R and not R.get("error"):   # render.json from before font match: one short visit for the fonts only
+    try:
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as pw:
+            bz = pw.chromium.launch(executable_path="/usr/bin/google-chrome", args=["--no-sandbox"]); pg = bz.new_page(viewport={"width": 1280, "height": 800})
+            pg.goto(s["final_url"], timeout=30000); pg.wait_for_timeout(3500); pg.add_style_tag(content=CONSENT_HIDE); pg.wait_for_timeout(300)
+            R["fonts"] = pg.evaluate(fontsmod.FONTS_JS)
+            for role in ("heading", "body"):
+                bx_ = ((R["fonts"] or {}).get(role) or {}).get("box")
+                if bx_ and bx_["w"] >= 20 and bx_["h"] >= 8:
+                    pg.screenshot(path=f"{d}/font-{role}.png", full_page=True, clip={"x": max(0, bx_["x"] - 4), "y": max(0, bx_["y"] - 4), "width": min(bx_["w"] + 8, 1270), "height": min(bx_["h"] + 8, 260)})
+            bz.close()
+        json.dump(R, open(render_p, "w"), indent=1)
+    except Exception as e: R["fonts_error"] = str(e)[:160]
+FONTS = fontsmod.resolve(R.get("fonts"))
+json.dump(FONTS, open(f"{d}/fonts.json", "w"), indent=1)
+print("fonts:", "; ".join(f"{r} {v.get('detected') or '-'} -> {v.get('family') or 'template'} ({v['source']})" for r, v in FONTS.items()))
 def rgb_hex(c):
     m = _re.match(r"rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)(?:,\s*([\d.]+))?", c or "")
     if not m or (m.group(4) is not None and float(m.group(4)) < .8): return None

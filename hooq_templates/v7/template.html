@@ -6,13 +6,15 @@
 :root{
  --brand:__BRAND__;--on-brand:__ON_BRAND__;--brand-deep:__DEEP__;--on-deep:__ON_DEEP__;--button:__BUTTON__;--on-button:__ON_BUTTON__;--accent-text:__ACCENT_TEXT__;
  --ink:#14181a;--muted:#4c5250;--paper:#f4f3ee;--surface:#ffffff;--line:#d9d8d0;--ribbon:#ffd84d;--on-ribbon:#222;--header-bg:__HEADER_BG__;--on-header:__ON_HEADER__;
- --font-display:'Barlow Condensed','Arial Narrow',Arial,sans-serif;--font-body:'DM Sans',Arial,sans-serif;--display-case:uppercase;--display-weight:800;
+ --font-display-t:'Barlow Condensed','Arial Narrow',Arial,sans-serif;--font-body-t:'DM Sans',Arial,sans-serif;--font-display:var(--font-display-t);--font-body:var(--font-body-t);--display-case:uppercase;--display-weight:800;
+ /* v8 font match: build.py may set the site's own (or closest free) fonts; scales keep wider letters on screen; template fonts are the fallback */
+ --font-button:var(--font-display);--button-weight:var(--display-weight);--button-case:var(--display-case);--disp-scale:1;--btn-scale:1;--disp-lh:.95;--disp-ls:-.01em;
  --radius-card:0px;--radius-button:0px;--radius-option:0px;--radius-chip:0px;
  --space-page:clamp(18px,5vw,72px);--space-block:clamp(24px,5vw,64px);--gap:14px;--shadow-card:8px 8px 0 var(--brand);
- --fs-hero:clamp(48px,7vw,104px);--fs-h2:clamp(38px,4.6vw,68px);--fs-body:16px;--header-h:68px}
+ --fs-hero:calc(clamp(48px,7vw,104px)*var(--disp-scale));--fs-h2:calc(clamp(38px,4.6vw,68px)*var(--disp-scale));--fs-body:16px;--header-h:68px}
 *{box-sizing:border-box}html,body{margin:0}body{font:var(--fs-body)/1.5 var(--font-body);color:var(--ink);background:var(--paper);-webkit-font-smoothing:antialiased}
 button,input{font:inherit;color:inherit}img{display:block;max-width:100%}
-.disp{font-family:var(--font-display);font-weight:var(--display-weight);text-transform:var(--display-case);line-height:.95;margin:0;letter-spacing:-.01em}
+.disp{font-family:var(--font-display);font-weight:var(--display-weight);text-transform:var(--display-case);line-height:var(--disp-lh);margin:0;letter-spacing:var(--disp-ls);overflow-wrap:normal}
 .eyebrow{font:700 12.5px var(--font-body);letter-spacing:.14em;text-transform:uppercase;margin:0 0 12px;opacity:.9}
 [data-slot=header]{background:var(--header-bg);color:var(--on-header);display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px var(--space-page);border-bottom:4px solid var(--brand);position:sticky;top:0;z-index:5}
 [data-slot=logo] img{height:40px;width:auto}[data-slot=logo] .wm{font:var(--display-weight) 24px var(--font-display);text-transform:var(--display-case);color:var(--on-header)}
@@ -25,7 +27,7 @@ button,input{font:inherit;color:inherit}img{display:block;max-width:100%}
 .intro .copy{padding:var(--space-block) var(--space-page);display:flex;flex-direction:column;justify-content:center}
 .intro h1{font-size:var(--fs-hero)}.intro .sub{font-size:clamp(17px,1.5vw,20px);max-width:34ch;margin:20px 0 26px}
 .intro .ph{position:relative;min-height:320px}.intro .ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 25%}
-.cta{display:inline-flex;align-items:center;justify-content:space-between;gap:18px;background:var(--cta,var(--surface));color:var(--on-cta,var(--ink));border:0;border-radius:var(--radius-button);padding:18px 24px;font:var(--display-weight) 22px var(--font-display);text-transform:var(--display-case);cursor:pointer;min-width:min(100%,320px)}
+.cta{display:inline-flex;align-items:center;justify-content:space-between;gap:18px;background:var(--cta,var(--surface));color:var(--on-cta,var(--ink));border:0;border-radius:var(--radius-button);padding:18px 24px;font:var(--button-weight) calc(22px*var(--btn-scale)) var(--font-button);text-transform:var(--button-case);cursor:pointer;min-width:min(100%,320px)}
 .steps{display:flex;flex-wrap:wrap;gap:6px 18px;margin:18px 0 0;padding:0;list-style:none;font-size:14px}.steps li:before{content:"✓ ";font-weight:700}
 [data-slot=chips]{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.chip{border:1.5px solid currentColor;border-radius:var(--radius-chip);padding:6px 11px;font-size:13px;font-weight:500;line-height:1.25}
 [data-slot=review]{margin-top:24px;border-left:4px solid currentColor;padding:4px 0 4px 16px;max-width:46ch;font-size:15px}[data-slot=review] b{display:block;font-size:13px;margin-top:6px;font-weight:500;opacity:.9}
@@ -36,11 +38,11 @@ button,input{font:inherit;color:inherit}img{display:block;max-width:100%}
 .opts{border-top:3px solid var(--ink);margin:0;padding:0;list-style:none;min-width:0}
 .opt{display:flex;gap:16px;align-items:center;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #bdbcb3;border-radius:var(--radius-option);padding:19px 8px;cursor:pointer;min-width:0}
 .opt .ix{font:var(--display-weight) 28px var(--font-display);color:var(--accent-text);min-width:38px}.opt .t{font-weight:700;font-size:18px;display:block}.opt .d{font-size:14px;color:var(--muted);display:block}
-.opt .mk{margin-left:auto;width:24px;height:24px;border:2px solid #9a9a92;flex:none}
+.opt .mk{margin-left:auto;width:24px;height:24px;border:2px solid #9a9a92;flex:none;border-radius:50%}.opt.multi .mk{border-radius:4px}.opt.multi.sel .mk:after{content:"✓";display:block;text-align:center;line-height:20px;font-weight:800;color:var(--brand)}.go.nx[disabled]{opacity:.45;cursor:default}
 .opt:hover,.opt.sel{background:var(--brand);color:var(--on-brand);padding-inline:16px}.opt:hover .ix,.opt.sel .ix,.opt:hover .d,.opt.sel .d{color:var(--on-brand)}.opt.sel .mk{background:var(--on-brand);border-color:var(--on-brand)}
 .f{display:grid;gap:12px}.f label{font-size:13px;font-weight:700}.f input[type=text],.f input[type=tel],.f input[type=email]{width:100%;border:2px solid #c9c8c0;border-radius:var(--radius-option);padding:13px;font-size:17px;background:var(--surface);margin-top:3px}
 .consent{display:flex;gap:9px;font-size:12.5px;color:var(--muted);align-items:flex-start}.consent input{margin-top:3px}
-.go{width:100%;background:var(--button);color:var(--on-button);border:0;border-radius:var(--radius-button);padding:17px;font:var(--display-weight) 22px var(--font-display);text-transform:var(--display-case);cursor:pointer}
+.go{width:100%;background:var(--button);color:var(--on-button);border:0;border-radius:var(--radius-button);padding:17px;font:var(--button-weight) calc(22px*var(--btn-scale)) var(--font-button);text-transform:var(--button-case);cursor:pointer}
 .demo{font-size:12px;color:#777;margin-top:8px;text-align:center}
 /* result */
 .res{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);min-height:calc(100svh - var(--header-h))}
@@ -48,7 +50,7 @@ button,input{font:inherit;color:inherit}img{display:block;max-width:100%}
 .rl .in{padding:28px var(--space-page) 36px}.rl h2{font-size:var(--fs-h2)}
 [data-slot=price]{background:var(--brand);color:var(--on-brand);border-radius:var(--radius-card);margin:20px 0 14px;padding:20px 22px}
 .k{font:700 12px var(--font-body);letter-spacing:.12em;text-transform:uppercase;opacity:.92}
-.v{font:var(--display-weight) clamp(42px,5.2vw,70px) var(--font-display);line-height:1;margin:8px 0 10px;white-space:nowrap}
+.v{font:var(--display-weight) calc(clamp(42px,5.2vw,70px)*var(--disp-scale)) var(--font-display);line-height:1;margin:8px 0 10px;white-space:nowrap}
 .ex{background:var(--ribbon);color:var(--on-ribbon);font:800 12px var(--font-body);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;display:inline-block;margin-bottom:10px}
 .own{background:rgba(0,0,0,.2);padding:8px 10px;margin:0 0 10px;font-size:14px}.n{font-size:13px;line-height:1.45}
 [data-slot=summary]{background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.35);border-radius:var(--radius-card);margin:20px 0 14px;padding:18px 20px}
@@ -70,18 +72,18 @@ button,input{font:inherit;color:inherit}img{display:block;max-width:100%}
 .sticky{display:none}#book{scroll-margin-top:84px}
 /* done */
 .done{min-height:calc(100svh - var(--header-h));background:var(--brand);color:var(--on-brand);padding:var(--space-block) var(--space-page);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-content:center}
-.done h2{font-size:clamp(46px,6vw,90px)}.done p{font-size:18px;max-width:36ch}.tick{width:80px;height:80px;background:var(--on-brand);color:var(--brand);display:grid;place-items:center;font:800 50px var(--font-display);margin-bottom:18px}
+.done h2{font-size:calc(clamp(46px,6vw,90px)*var(--disp-scale))}.done p{font-size:18px;max-width:36ch}.tick{width:80px;height:80px;background:var(--on-brand);color:var(--brand);display:grid;place-items:center;font:800 50px var(--font-display);margin-bottom:18px}
 .sum{background:var(--brand-deep);color:var(--on-deep);padding:18px;margin-top:16px;font-size:15px;max-width:440px}.sum b{display:block;font:800 22px var(--font-display);text-transform:var(--display-case)}
 [data-slot=owner-brief]{background:var(--surface);color:var(--ink);padding:20px;border-left:8px solid var(--brand-deep);align-self:center}[data-slot=owner-brief] p{font:500 15px/1.5 ui-monospace,Menlo,monospace;margin:0}
 [data-slot=footer]{display:flex;justify-content:space-between;gap:12px;padding:14px var(--space-page);font-size:12.5px;color:var(--muted);border-top:1px solid var(--line);background:var(--surface)}
 @media (max-width:820px){
- :root{--fs-hero:54px;--fs-h2:40px;--space-page:18px;--space-block:26px}
+ :root{--fs-hero:calc(54px*var(--disp-scale));--fs-h2:calc(40px*var(--disp-scale));--space-page:18px;--space-block:26px}
  [data-slot=logo] img{height:32px}.tag{display:none}
  .intro{grid-template-columns:1fr;min-height:0}.intro .ph{order:-1;min-height:0;height:220px}.cta{width:100%}
  .q{grid-template-columns:1fr;gap:16px;min-height:0;padding-bottom:40px}.qn{font-size:46px}
  .res{grid-template-columns:1fr}.rl .ph{height:180px}.rr{padding:20px 14px 90px}[data-slot=booking]{padding:18px 14px;box-shadow:6px 6px 0 var(--brand)}
  .days{grid-template-columns:repeat(3,minmax(0,1fr))}
- .sticky{display:block;position:fixed;left:0;right:0;bottom:0;padding:10px 14px;background:var(--surface);border-top:2px solid var(--ink);z-index:6}.sticky button{width:100%;background:var(--button);color:var(--on-button);border:0;padding:14px;font:800 20px var(--font-display);text-transform:var(--display-case)}
+ .sticky{display:block;position:fixed;left:0;right:0;bottom:0;padding:10px 14px;background:var(--surface);border-top:2px solid var(--ink);z-index:6}.sticky button{width:100%;background:var(--button);color:var(--on-button);border:0;padding:14px;font:var(--button-weight) calc(20px*var(--btn-scale)) var(--font-button);text-transform:var(--button-case)}
  .done{grid-template-columns:1fr;min-height:0}.done h2{font-size:50px}
 }
 </style></head><body>
@@ -97,7 +99,10 @@ const SN=H.shortName,MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep",
 const TIMING=CON?{title:"When would you like to talk it through?",help:"No rush. This just helps "+SN+" plan the call.",options:[{id:"weeks",label:"In the next few weeks",desc:"Ready to talk it through",brief:"wants to talk in the next few weeks"},{id:"months",label:"Later on",desc:"Not yet, but soon",brief:"wants to talk later on"},{id:"planning",label:"Just looking",desc:"Getting an idea first",brief:"just looking"}]}:{title:"When are you looking to get this done?",help:"No rush. This just helps "+SN+" plan the call.",options:[{id:"weeks",label:"In the next few weeks",desc:"Ready to get it booked in",brief:"looking at the next few weeks"},{id:"months",label:"In the next few months",desc:"Planning ahead",brief:"looking at the next few months"},{id:"planning",label:"Just planning",desc:"Getting an idea first",brief:"just planning"}]};
 const OTHER={id:"other",label:"Something else",noun:"enquiry",desc:"Talk it through "+(BK?"at an appointment":"on a call"),brief:"something not in the list (to discuss)",questions:[],price:{mode:"none"},result:{title:"Let's talk it through",summary:CON?"Tell "+SN+" what is going on and talk it through on the call.":SN+" will listen to what you need and tell you straight whether it's a job they can take on.",includes:[]}};
 let S={step:0,a:{},tab:"cal",day:null,time:null,cb:null,name:P.get("name")||"",phone:P.get("phone")||"",email:P.get("email")||"",pc:""};
-(P.get("a")||"").split(",").filter(Boolean).forEach(kv=>{const[k,v]=kv.split(":");S.a[k]=v});
+(P.get("a")||"").split(",").filter(Boolean).forEach(kv=>{const[k,v]=kv.split(":");S.a[k]=v.includes("+")?v.split("+"):v});
+/* v8 multi-select: a question with multi:true keeps an array of option ids; the visitor taps several, then Next */
+const isSel=(key,id)=>Array.isArray(S.a[key])?S.a[key].includes(id):S.a[key]===id;
+const curQ=()=>{const st=steps()[S.step-1];return st&&/^q\d+$/.test(st)?job().questions[+st.slice(1)]:null};
 const job=()=>S.a.job==="other"?OTHER:(H.jobs.find(j=>j.id===S.a.job)||null);
 function steps(){const j=job()||H.jobs[0];return ["job",...j.questions.map((q,i)=>"q"+i),"timing","contact"]}
 /* v7 possessive: Shaggy's stays Shaggy's, Builders -> Builders' */
@@ -107,7 +112,7 @@ const gx=v=>LC.symbol+(+v).toLocaleString(LC.lang,{maximumFractionDigits:2});
 /* price rule (v4): the site's own figures exactly, or the owner's own typed range. Nothing else, no adjusting by answers. Otherwise no figure. */
 /* v4.1 price table: the visitor's answers must match exactly one published row; that row's figure is shown as written. No match: no figure. */
 function tableRow(p){if(p.picked){const hit=p.rows.filter(r=>Object.entries(r.when||{}).every(([k,v])=>v.includes(S.a[k])));return hit.length===1?hit[0]:null}if(p.list){const ot=p.opt_tokens,sel=new Set();Object.entries(S.a).filter(([k])=>p.relevant.includes(k)).forEach(([k,v])=>(ot[k+":"+v]||[]).forEach(t=>sel.add(t)));const hit=p.rows.filter(r=>r.req.length===sel.size&&r.req.every(t=>sel.has(t)));return hit.length===1?hit[0]:null}
- const ot=p.opt_tokens,sel=new Set();const ans=Object.entries(S.a).filter(([k])=>/^q\d+$/.test(k));ans.forEach(([k,v])=>(ot[k+":"+v]||[]).forEach(t=>sel.add(t)));
+ const ot=p.opt_tokens,sel=new Set();const ans=Object.entries(S.a).filter(([k,v])=>/^q\d+$/.test(k)&&!Array.isArray(v));ans.forEach(([k,v])=>(ot[k+":"+v]||[]).forEach(t=>sel.add(t)));
  const hit=p.rows.filter(r=>{const rowt=new Set([...r.req,...r.one_of]);if(!r.req.every(t=>sel.has(t)))return false;if(r.one_of.length&&!r.one_of.some(t=>sel.has(t)))return false;return ans.every(([k,v])=>(ot[k+":"+v]||[]).some(t=>rowt.has(t)))});return hit.length===1?hit[0]:null}
 function band(){const j=job();if(!j)return null;const p=j.price;if(p.mode==="table"){const r=tableRow(p);return r?{mode:"site",low:r.value,high:r.high||null,exact:!r.plus&&!r.high,from:!!r.plus&&!r.high,unit:r.unit||null,quote:r.quote,row:r.label,neutral:true}:{mode:"none"}}
  if(!(p.mode==="site"||p.mode==="owner")||!p.low)return{mode:"none"};
@@ -117,7 +122,7 @@ const fday=d=>LC.country==="US"||LC.country==="CA"?DOW[d.getDay()]+", "+MON[d.ge
 const ftime=t=>{if(!LC.hour12)return t;let[h,m]=t.split(":").map(Number);return (h%12||12)+":"+String(m).padStart(2,"0")+(h<12?" am":" pm")};
 function slots(){const out=[];let d=new Date();d.setHours(12);while(out.length<6){d=new Date(d.getTime()+864e5);if(d.getDay()%6)out.push(new Date(d))}return out}
 const TIMES=["09:00","10:30","12:00","14:00","15:30","17:00"],CB=["Morning","Afternoon","Evening","Any time"];
-function opt(o,i,key){return `<li><button class="opt ${S.a[key]===o.id?"sel":""}" data-k="${key}" data-v="${o.id}"><span class="ix">${String(i+1).padStart(2,"0")}</span><span><span class="t">${esc(o.label)}</span><span class="d">${esc(o.desc||"")}</span></span><span class="mk"></span></button></li>`}
+function opt(o,i,key,multi){return `<li><button class="opt ${isSel(key,o.id)?"sel":""}${multi?" multi":""}" data-k="${key}" data-v="${o.id}"${multi?' data-m="1" aria-pressed="'+isSel(key,o.id)+'"':""}><span class="ix">${String(i+1).padStart(2,"0")}</span><span><span class="t">${esc(o.label)}</span><span class="d">${esc(o.desc||"")}</span></span><span class="mk"></span></button></li>`}
 function prog(){const n=steps().length,on=S.step>=1&&S.step<=n;document.getElementById("prog").innerHTML=on?`<span class="stp">Step ${S.step} of ${n}</span>`:"";document.getElementById("tag").style.display=on?"none":""}
 const priced=()=>H.jobs.some(j=>j.price.mode==="site"||j.price.mode==="owner"||j.price.mode==="table");
 function intro(){const r=H.review,hk=H.hook;return `<section class="intro" data-slot="intro"><div class="copy"><p class="eyebrow" data-slot="hook.eyebrow">${esc(hk.eyebrow)}</p><h1 class="disp" data-slot="hook.headline">${esc(hk.headline)}</h1><p class="sub" data-slot="hook.sub">${esc(hk.sub)}</p>
@@ -130,9 +135,11 @@ function question(){const st=steps()[S.step-1],n=S.step;let q,key,body;
  else if(st==="contact"){const b=band();q={title:"Where should "+SN+" reach you?",help:b&&b.mode!=="none"?"Their price is on the next screen, with a time to book your "+CALL+".":"Your summary is on the next screen, with a time to book your "+CALL+"."};
   body=`<form class="f" id="cf" data-slot="contact"><label>First name<input type="text" id="nm" required value="${esc(S.name)}"></label><label>${esc(LC.phone_label)}<input type="tel" id="mb" required></label><label>Email <span style="font-weight:400">(optional)</span><input type="email" id="em"></label>${CON?"":`<label>${esc(LC.postal)} <span style="font-weight:400">(optional)</span><input type="text" id="pc" maxlength="10" value="${esc(S.pc)}"></label>`}
 <label class="consent"><input type="checkbox" required> I agree to ${esc(SN)} contacting me about this enquiry.</label><button class="go" type="submit">${b&&b.mode!=="none"?"See the price":"See my summary"} →</button><p class="demo">Demo: nothing is sent.</p></form>`}
- else {q=job().questions[+st.slice(1)];key=st;body=`<ul class="opts">${q.options.map((o,i)=>opt(o,i,key)).join("")}</ul>`}
+ else {q=job().questions[+st.slice(1)];key=st;const m=!!q.multi,nsel=m&&Array.isArray(S.a[key])?S.a[key].length:0;q=m&&!/\b(every|all|any|each|everything|several|multiple|more than one)\b/i.test(q.help||"")?{...q,help:(q.help?q.help.replace(/[.\s]*$/,". "):"")+"Tap all that apply."}:q;
+  body=`<ul class="opts">${q.options.map((o,i)=>opt(o,i,key,m)).join("")}</ul>${m?`<button class="go nx" data-next="1" ${nsel?"":"disabled"} style="margin-top:16px">${nsel?"Next":"Pick at least one"} →</button>`:""}`}
  return `<section class="q" data-slot="question"><div><div class="qn">${String(n).padStart(2,"0")}</div><h2 class="disp">${esc(q.title)}</h2><p class="help">${esc(q.help||"")}</p><button class="back" data-back="1">← ${n===1?"Start again":"Back"}</button>${st!=="contact"?` <button class="talk" data-talk="1">I'd rather just talk →</button>`:""}</div><div style="min-width:0">${body}</div></section>`}
-function picked(){const j=job(),out=[];j.questions.forEach((q,i)=>{const o=q.options.find(o=>o.id===S.a["q"+i]);if(o)out.push([q.short||q.title,o.label])});return out}
+function pickedOpts(q,i){const v=S.a["q"+i];const ids=Array.isArray(v)?v:[v];return q.options.filter(o=>ids.includes(o.id))}
+function picked(){const j=job(),out=[];j.questions.forEach((q,i)=>{const os=pickedOpts(q,i);if(os.length)out.push([q.short||q.title,os.map(o=>o.label).join(", ")])});return out}
 function timingLabel(){const t=TIMING.options.find(o=>o.id===S.a.timing);return t?t.label:""}
 function bandNote(b,j){const fin=BK?"Your exact price is confirmed when you book.":"The exact price for your job is confirmed on the call.";if(b.mode==="site")return "This is "+pos(SN)+" own published price. Their website says: “"+esc(b.quote||j.price.site_quote)+"” "+fin;
  return "This is "+pos(SN)+" own price range for this job. "+fin}
@@ -167,7 +174,7 @@ function summaryBlock(j){const tl=j.timeline;const rows=[[CON?"Situation":"Job",
 ${tl&&tl.text?`<div class="blk" data-slot="timeline"><h4>Typical timeline</h4><p>${esc(tl.text)}</p>${tl.source?`<small>Typical for this kind of job, not a promise. Source: ${esc(tl.source)}</small>`:`<small>Typical for this kind of job, not a promise.</small>`}</div>`:""}`}
 function drivers(j,pr){const rows=picked().slice(0,3);if(!rows.length||j.id==="other")return"";
  return `<div data-slot="drivers" class="drv"><span class="k">${pr||CON?"Your answers":"What shapes the job"}</span> ${rows.map(r=>`<b>${esc(r[0])}:</b> ${esc(r[1])}`).join(" · ")}</div>`}
-function result(){const j=job(),b=band(),img=j.id==="other"?"p-intro":"p-"+j.id,pr=b.mode!=="none";
+function result(){const j=job(),b=band(),img=j.id==="other"?"p-intro":(j.photo||"p-intro"),pr=b.mode!=="none";
  const title=j.id==="other"||CON?j.result.title:pr?j.result.title:"Your "+(j.noun||j.label.toLowerCase())+" summary";
  const trust=[...(H.chips||[])].slice(0,4);
  return `<section class="res" data-slot="result"><div class="rl"><div class="ph" data-slot="result.photo"><img src="images/${esc(img)}.jpg" alt=""></div><div class="in"><p class="eyebrow">${j.id==="other"?"Your enquiry":"Your "+esc(j.noun||j.label.toLowerCase())+(pr?" price":"")}</p><h2 class="disp" data-slot="result.title">${esc(title)}</h2>
@@ -177,7 +184,7 @@ ${j.result.includes&&j.result.includes.length?`${CON?`<h4 style="margin:16px 0 0
 ${!pr&&trust.length?`<div class="blk" data-slot="trust"><h4>Why people choose ${esc(SN)}</h4><p>${trust.map(esc).join(" · ")}</p></div>`:""}<p style="margin-top:14px"><button class="change" data-change="1">← Change my answers</button></p></div></div>
 <div class="rr">${bookCard()}<div data-slot="about"><h4>${j.id==="other"?"About "+esc(SN):CON?"About this":"About the job"}</h4>${esc(j.result.summary)}${H.rating?`<p style="margin:10px 0 0;font-weight:700">${/★/.test(H.rating)?"":"★ "}${esc(H.rating)}</p>`:""}${H.review?`<p style="margin:10px 0 0">“${esc(H.review.quote)}” <b>${esc(H.review.by)}</b></p>`:""}</div></div></section><div class="sticky"><button data-scroll="1">Book my ${CALL} ↓</button></div>`}
 function slotText(){if(S.tab==="cb")return "wants a call back ("+(S.cb||"any time").toLowerCase()+")";if(S.tab==="wa")return LC.msg_tab==="WhatsApp"?"prefers WhatsApp":"prefers a text";const d=slots()[S.day||0];return CALL+" booked "+fday(d)+" "+ftime(S.time||TIMES[1])}
-function leadBrief(name){const j=job(),b=band(),parts=[name||S.name||"Sarah",j.brief];j.questions.forEach((q,i)=>{const o=q.options.find(o=>o.id===S.a["q"+i]);if(o)parts.push(o.brief)});
+function leadBrief(name){const j=job(),b=band(),parts=[name||S.name||"Sarah",j.brief];j.questions.forEach((q,i)=>{const os=pickedOpts(q,i);if(os.length)parts.push(os.map(o=>o.brief).join(" and "))});
  const t=TIMING.options.find(o=>o.id===S.a.timing);if(t)parts.push(t.brief);if(S.pc)parts.push(S.pc.toUpperCase());
  if(!CON)parts.push(b.mode==="none"?"price to give "+(BK?"when booking":"on the call"):"shown "+bandText(b)+(j.price.unit?" "+j.price.unit:"")+" ("+(b.mode==="site"?"your published price":"your own range")+")");parts.push(slotText());return parts.join(", ")}
 function done(){const j=job(),b=band(),nm=S.name||"there";const how=S.tab==="cal"?(()=>{const d=slots()[S.day||0],w=fday(d)+" at "+ftime(S.time||TIMES[1]);return BK?"Your appointment request: "+w+". "+SN+" confirms it with you.":SN+" will call you on "+w+"."})():S.tab==="cb"?SN+" will call you back ("+(S.cb||"any time").toLowerCase()+").":SN+(LC.msg_tab==="WhatsApp"?" will message you on WhatsApp to arrange the ":" will text you to arrange the ")+CALL+".";
@@ -187,6 +194,8 @@ function render(){const n=steps().length,app=document.getElementById("app");prog
  app.innerHTML=S.step===0?intro():S.step<=n?question():S.step===n+1?result():done();window.scrollTo(0,0)}
 document.addEventListener("click",e=>{const t=e.target.closest("button");if(!t)return;
  if(t.dataset.go){S.step=1;render()}else if(t.dataset.back){S.step--;render()}else if(t.dataset.change){S.step=1;render()}
+ else if(t.dataset.k&&t.dataset.m){const k=t.dataset.k,cur=Array.isArray(S.a[k])?S.a[k]:[];S.a[k]=cur.includes(t.dataset.v)?cur.filter(x=>x!==t.dataset.v):[...cur,t.dataset.v];const y=window.scrollY;render();window.scrollTo(0,y)}
+ else if(t.dataset.next){const q=curQ(),k=steps()[S.step-1];if(q&&q.multi&&!(Array.isArray(S.a[k])&&S.a[k].length))return;S.step++;render()}
  else if(t.dataset.k){S.a[t.dataset.k]=t.dataset.v;render();setTimeout(()=>{S.step++;render()},180)}
  else if(t.dataset.confirm){S.step=steps().length+2;render()}
  else if(t.dataset.tab){S.tab=t.dataset.tab;render();document.getElementById("book").scrollIntoView()}
@@ -201,4 +210,7 @@ if(P.get("tab"))S.tab=P.get("tab");if(P.get("textme"))S.texted=1;if(P.get("d"))S
 const s=P.get("s");if(s==="q")S.step=+P.get("i");else if(s==="result")S.step=steps().length+1;else if(s==="done")S.step=steps().length+2;
 render();if(P.get("scroll")==="book")setTimeout(()=>document.getElementById("book").scrollIntoView(),50);
 window.leadBrief=leadBrief;window.__band=band;window.__S=S;
+/* v8: big display lines never run off screen whatever the font: shrink a line (down to 62%) until it fits its box */
+function fitDisp(){document.querySelectorAll(".disp,.v").forEach(e=>{e.style.fontSize="";let fs=parseFloat(getComputedStyle(e).fontSize),min=fs*.62,g=0;while(e.scrollWidth>e.clientWidth+1&&fs>min&&g++<30){fs-=2;e.style.fontSize=fs+"px"}})}
+{const _r=render;render=function(){_r();fitDisp()}}addEventListener("resize",fitDisp);addEventListener("fontsdone",fitDisp);document.fonts&&document.fonts.ready.then(fitDisp);fitDisp();
 </script></body></html>

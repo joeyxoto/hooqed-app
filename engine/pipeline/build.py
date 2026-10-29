@@ -70,6 +70,9 @@ if rc and not URG.search(rc) and not re.match(r"\s*(read|see|check|click|view|fi
 h["rating"] = rating
 loc = f.get("location") or {}
 logo = f'<img src="{br["logo_file"]}" alt="{html.escape(f["name"])}">' if br.get("logo_file") else f'<span class="wm">{html.escape(h["shortName"])}</span>'
+import fonts as fontsmod
+try: FONT_CSS = fontsmod.css(json.load(open(f"{d}/fonts.json")))
+except Exception as e_: FONT_CSS = ""; print("fonts: template fonts kept:", str(e_)[:120])
 def page(hh, example):
     data = {k: hh.get(k) for k in ("shortName", "hook", "jobs", "booking", "review", "chips", "rating", "path", "locale", "booking_kind", "booking_embed", "flow")}; data["example"] = example
     t = open("pipeline/template.html").read().replace('<html lang="en-GB">', f'<html lang="{hh["locale"]["lang"]}">')
@@ -77,6 +80,8 @@ def page(hh, example):
                  "__BUTTON__": br["button"], "__ON_BUTTON__": br["on_button"], "__ACCENT_TEXT__": br["accent_text"], "__HEADER_BG__": br["header_bg"], "__ON_HEADER__": br["on_header"],
                  "__LOGO__": logo, "__NAME__": html.escape(f["name"]), "__AREA__": html.escape(loc.get("area") or ""), "__TAG__": "Personal summary" if hh.get("flow") == "person" else "Interactive quote", "__DATA__": json.dumps(data).replace("</", "<\\/")}.items():
         t = t.replace(k, v)
+    if FONT_CSS:   # v8 font match: the site's own fonts (or closest free ones), template fonts as fallback
+        t = t.replace("</head>", FONT_CSS + "</head>", 1)
     if br.get("cta"):   # the site's own button colour (e.g. green on a navy site) for the main call-to-action; templates without --cta ignore it
         t = t.replace("</head>", f'<style>:root{{--cta:{br["cta"]};--on-cta:{br["on_cta"]}}}</style></head>', 1)
     return t

@@ -76,7 +76,10 @@ logo_cands = _lg.extract(r.text, base)
 og = soup.find("meta", property="og:image")
 STATE = re.compile(r":(hover|focus|focus-visible|focus-within|active|visited)\b", re.I)
 def resting_css(t):   # drop CSS rules that only style a :hover/:focus/:active/:visited state: those colours are never the resting look
-    return re.sub(r"([^{}]+)\{([^{}]*)\}", lambda m: "" if all(STATE.search(sel) for sel in m.group(1).split(",")) else m.group(0), t)
+    # v8: only inside <style> blocks, with bounded runs (the old whole-page pattern backtracked for minutes on big pages with stray braces)
+    rule = re.compile(r"([^{}]{1,3000})\{([^{}]{0,20000})\}")
+    fix = lambda css: rule.sub(lambda m: "" if all(STATE.search(sel) for sel in m.group(1).split(",")) else m.group(0), css)
+    return re.sub(r"(<style[^>]*>)(.*?)(</style>)", lambda m: m.group(1) + fix(m.group(2)) + m.group(3), t, flags=re.S | re.I)
 colors = re.findall(r"#[0-9a-fA-F]{6}\b", resting_css(r.text))
 theme = soup.find("meta", attrs={"name": "theme-color"})
 pages = [{"url": base, "text": text(BeautifulSoup(r.text, "html.parser"))[:20000]}]

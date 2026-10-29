@@ -15,11 +15,17 @@ def chat(model, system, user, logf, step, effort=None, schema=None):
     c = j["choices"][0]["message"]["content"].strip()
     if c.startswith("```"): c = c.strip("`").split("\n", 1)[1].rsplit("```", 1)[0]
     return json.loads(c)
+class Moderated(Exception): pass
 def image(prompt, path, logf, step):
     body = {"model": "grok-imagine-image-2.0", "prompt": prompt, "n": 1, "response_format": "b64_json", "quality": "low", "resolution": "1k", "aspect_ratio": "4:3"}
     for a in range(3):
         r = requests.post(B + "/images/generations", headers={"Authorization": "Bearer " + KEY}, json=body, timeout=300)
         if r.ok: break
+        if "content-moderated" in r.text:   # v8: a rejected picture is billed; the same prompt is not sent again (images.py softens or drops it)
+            try: u = r.json().get("usage", {})
+            except Exception: u = {}
+            _log(logf, {"step": step + ":rejected", "model": "grok-imagine-image-2.0", "usd": (u.get("cost_in_usd_ticks") or 0) / 1e10 if u.get("cost_in_usd_ticks") else 0.04, "list_usd": 0.04, "raw_usage": u})
+            raise Moderated(r.text[:200])
         print("img retry", r.status_code, r.text[:300]); time.sleep(4)
         if r.status_code == 400 and a == 0:
             for k in ("quality", "resolution", "aspect_ratio"): body.pop(k, None)
